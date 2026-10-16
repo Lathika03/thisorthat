@@ -1,0 +1,1203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create a Poll | This or That</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --purple: #0d9488;
+    --dark-purple: #0f766e;
+    --light-purple: #d1fae5;
+    --text: #134e4a;
+    --muted: #64748b;
+    --border: #a7f3d0;
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    --cursor-hue: 165;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
+    isolation: isolate;
+    background:
+        radial-gradient(
+            circle at var(--mouse-x) var(--mouse-y),
+            hsla(var(--cursor-hue), 90%, 72%, .48),
+            transparent 38%
+        ),
+        linear-gradient(
+            125deg,
+            #34d399,
+            #2dd4bf,
+            #7dd3fc,
+            #c4b5fd,
+            #fbcfe8
+        );
+    background-size: 100% 100%, 350% 350%;
+    background-attachment: fixed;
+    animation: gradientFlow 18s ease infinite;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+        350px circle at var(--mouse-x) var(--mouse-y),
+        hsla(var(--cursor-hue), 90%, 65%, .20),
+        transparent 72%
+    );
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+header {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 17px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    background: linear-gradient(120deg,#0f766e,#14b8a6,#8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 22px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+nav a {
+    color: #39756e;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .25s;
+}
+
+nav a:hover {
+    color: #7c3aed;
+    transform: translateY(-2px);
+}
+
+.container {
+    width: min(1050px,92%);
+    margin: 38px auto 60px;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.eyebrow {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 25px;
+    background: rgba(255,255,255,.7);
+    color: #0f766e;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 13px;
+}
+
+.hero h1 {
+    font-size: clamp(28px,5vw,42px);
+    margin-bottom: 10px;
+    color: #134e4a;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg,#0f766e,#0ea5e9,#8b5cf6,#ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: #426c72;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0,1.1fr) minmax(280px,.9fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.panel {
+    background: rgba(255,255,255,.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 22px;
+    padding: 25px;
+    box-shadow: 0 10px 35px rgba(15,118,110,.08);
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+
+.panel:hover {
+    border-color: #5eead4;
+    box-shadow: 0 16px 40px rgba(15,118,110,.15);
+}
+
+.panel h2 {
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.panel-description {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 13px;
+    margin-bottom: 18px;
+    border: 1px solid #b6ded7;
+    border-radius: 11px;
+    background: rgba(255,255,255,.96);
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .25s, box-shadow .25s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 4px rgba(20,184,166,.15);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 75px;
+}
+
+.option-editor {
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    margin-bottom: 16px;
+    background: rgba(240,253,250,.82);
+    transition: .3s;
+}
+
+.option-editor:hover {
+    border-color: #5eead4;
+    box-shadow: 0 8px 22px rgba(20,184,166,.12);
+}
+
+.option-editor h3 {
+    font-size: 14px;
+    margin-bottom: 14px;
+}
+
+.image-upload {
+    display: block;
+    width: 100%;
+    min-height: 125px;
+    border: 2px dashed #6ee7b7;
+    border-radius: 13px;
+    background: linear-gradient(135deg,#ecfdf5,#ccfbf1,#dbeafe);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    transition: .3s;
+}
+
+.image-upload:hover {
+    border-color: #0d9488;
+    box-shadow: 0 0 22px rgba(20,184,166,.22);
+    background: linear-gradient(135deg,#d1fae5,#bae6fd,#ede9fe);
+}
+
+.image-upload input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.image-upload img {
+    display: none;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.upload-placeholder {
+    min-height: 125px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 15px;
+}
+
+.upload-placeholder strong {
+    font-size: 13px;
+    color: var(--dark-purple);
+}
+
+.upload-placeholder span {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.image-upload.has-image img {
+    display: block;
+}
+
+.image-upload.has-image .upload-placeholder {
+    display: none;
+}
+
+.upload-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.small-button {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--dark-purple);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.small-button:hover {
+    background: #ccfbf1;
+}
+
+.third-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px;
+    background: linear-gradient(120deg,#d1fae5,#cffafe,#ede9fe);
+    border: 1px solid #a7f3d0;
+    border-radius: 13px;
+    margin: 18px 0;
+    cursor: pointer;
+}
+
+.third-toggle input {
+    margin-top: 5px;
+    accent-color: var(--purple);
+    width: 17px;
+    height: 17px;
+}
+
+.third-toggle strong {
+    display: block;
+    font-size: 13px;
+}
+
+.third-toggle span {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.6;
+}
+
+.primary-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(110deg,#0d9488,#14b8a6,#0ea5e9,#8b5cf6,#ec4899);
+    background-size: 300% 300%;
+    animation: gradientFlow 8s ease infinite;
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 7px 20px rgba(13,148,136,.2);
+    transition: transform .25s, box-shadow .25s;
+}
+
+.primary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(13,148,136,.3);
+}
+
+.message {
+    min-height: 20px;
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--dark-purple);
+}
+
+.preview-box {
+    position: sticky;
+    top: 20px;
+}
+
+.preview-label {
+    color: #0d9488;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.preview-question {
+    font-size: 19px;
+    margin-bottom: 15px;
+    overflow-wrap: anywhere;
+}
+
+.preview-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.preview-options.three {
+    grid-template-columns: 1fr;
+}
+
+.preview-option {
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    overflow: hidden;
+    background: white;
+    min-width: 0;
+    transition: transform .3s, box-shadow .3s;
+}
+
+.preview-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(20,184,166,.2);
+}
+
+.preview-option img {
+    display: block;
+    width: 100%;
+    height: 125px;
+    object-fit: cover;
+    background: #d1fae5;
+}
+
+.preview-option h3 {
+    font-size: 12px;
+    padding: 10px;
+    overflow-wrap: anywhere;
+}
+
+.preview-option button {
+    width: calc(100% - 20px);
+    margin: 0 10px 10px;
+    padding: 9px 5px;
+    background: linear-gradient(120deg,#d1fae5,#cffafe);
+    color: var(--dark-purple);
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.preview-option button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.preview-hint {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 15px;
+    line-height: 1.7;
+}
+
+.saved-section {
+    margin-top: 35px;
+}
+
+.saved-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.saved-heading h2 {
+    font-size: 22px;
+}
+
+.saved-heading p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.saved-grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 16px;
+}
+
+.saved-poll {
+    background: rgba(255,255,255,.9);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    min-width: 0;
+    transition: transform .3s, box-shadow .3s;
+}
+
+.saved-poll:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(15,118,110,.15);
+}
+
+.saved-poll h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.saved-poll p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.saved-poll .poll-images {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    margin-bottom: 12px;
+}
+
+.saved-poll .poll-images img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #d1fae5;
+}
+
+.saved-poll .poll-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.saved-poll .poll-actions button {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dark-purple);
+    cursor: pointer;
+}
+
+.saved-poll .poll-actions button:hover {
+    background: #ccfbf1;
+}
+
+.empty-state {
+    background: rgba(255,255,255,.85);
+    border: 1px dashed #6ee7b7;
+    padding: 30px 15px;
+    border-radius: 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #426c72;
+    font-size: 12px;
+    background: rgba(255,255,255,.3);
+}
+
+::selection {
+    background: #a7f3d0;
+    color: #134e4a;
+}
+
+@media (max-width: 780px) {
+    header {
+        justify-content: center;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 13px;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-box {
+        position: static;
+    }
+
+    .saved-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body, .primary-button {
+        animation: none;
+    }
+
+    *, *::before, *::after {
+        transition-duration: .01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="index.html">💚 This or That</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="results.html">Results</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <span class="eyebrow">✨ YOUR IDEAS, YOUR POLL</span>
+        <h1>Create Your <span>Choice</span></h1>
+        <p>Ask a question, add pictures, and let people choose their favourite!</p>
+    </section>
+
+    <div class="layout">
+
+        <section class="panel">
+            <h2>📝 Build Your Poll</h2>
+            <p class="panel-description">
+                Enter your own question and category, then add pictures for your choices.
+            </p>
+
+            <form id="createForm">
+                <label for="pollQuestion">Poll question</label>
+                <input type="text" id="pollQuestion"
+                       placeholder="Type your own question..."
+                       maxlength="120" required>
+
+                <label for="newCategory">Choose or enter a category</label>
+                <input type="text" id="newCategory" list="categorySuggestions"
+                       placeholder="Select a suggestion or type your own..."
+                       maxlength="40" required>
+
+                <datalist id="categorySuggestions">
+                    <option value="Food">
+                    <option value="Lifestyle">
+                    <option value="Travel">
+                    <option value="Entertainment">
+                    <option value="Technology">
+                    <option value="Fashion">
+                    <option value="Sports">
+                    <option value="Nature">
+                    <option value="Education">
+                    <option value="Gaming">
+                    <option value="Music">
+                    <option value="Other">
+                </datalist>
+
+                <div class="option-editor">
+                    <h3>🟢 Option 1</h3>
+
+                    <label for="newA">Option name</label>
+                    <input type="text" id="newA"
+                           placeholder="Enter the first choice..."
+                           maxlength="70" required>
+
+                    <label>Option picture</label>
+                    <label class="image-upload" id="uploadBoxA" for="imageInputA">
+                        <input type="file" id="imageInputA" accept="image/*" required>
+                        <img id="uploadPreviewA" alt="Option 1 preview">
+                        <div class="upload-placeholder">
+                            <strong>📷 Upload Option 1 Picture</strong>
+                            <span>Choose an image from your device</span>
+                        </div>
+                    </label>
+
+                    <div class="upload-actions">
+                        <button type="button" class="small-button"
+                                onclick="document.getElementById('imageInputA').click()">
+                            Choose image
+                        </button>
+                        <button type="button" class="small-button"
+                                onclick="clearImage('A')">Remove image</button>
+                    </div>
+                </div>
+
+                <div class="option-editor">
+                    <h3>🟢 Option 2</h3>
+
+                    <label for="newB">Option name</label>
+                    <input type="text" id="newB"
+                           placeholder="Enter the second choice..."
+                           maxlength="70" required>
+
+                    <label>Option picture</label>
+                    <label class="image-upload" id="uploadBoxB" for="imageInputB">
+                        <input type="file" id="imageInputB" accept="image/*" required>
+                        <img id="uploadPreviewB" alt="Option 2 preview">
+                        <div class="upload-placeholder">
+                            <strong>📷 Upload Option 2 Picture</strong>
+                            <span>Choose an image from your device</span>
+                        </div>
+                    </label>
+
+                    <div class="upload-actions">
+                        <button type="button" class="small-button"
+                                onclick="document.getElementById('imageInputB').click()">
+                            Choose image
+                        </button>
+                        <button type="button" class="small-button"
+                                onclick="clearImage('B')">Remove image</button>
+                    </div>
+                </div>
+
+                <label class="third-toggle" for="enableThird">
+                    <input type="checkbox" id="enableThird">
+                    <span>
+                        <strong>➕ Add Option 3?</strong>
+                        <span>Tick to add another choice with its own picture.</span>
+                    </span>
+                </label>
+
+                <div class="option-editor" id="thirdEditor" hidden>
+                    <h3>🟢 Option 3 (Optional)</h3>
+
+                    <label for="newC">Option name</label>
+                    <input type="text" id="newC"
+                           placeholder="Enter the third choice..."
+                           maxlength="70" disabled>
+
+                    <label>Option picture</label>
+                    <label class="image-upload" id="uploadBoxC" for="imageInputC">
+                        <input type="file" id="imageInputC" accept="image/*" disabled>
+                        <img id="uploadPreviewC" alt="Option 3 preview">
+                        <div class="upload-placeholder">
+                            <strong>📷 Upload Option 3 Picture</strong>
+                            <span>Choose an image from your device</span>
+                        </div>
+                    </label>
+
+                    <div class="upload-actions">
+                        <button type="button" class="small-button"
+                                onclick="document.getElementById('imageInputC').click()">
+                            Choose image
+                        </button>
+                        <button type="button" class="small-button"
+                                onclick="clearImage('C')">Remove image</button>
+                    </div>
+                </div>
+
+                <label for="pollDescription">Short description (optional)</label>
+                <textarea id="pollDescription" maxlength="250"
+                          placeholder="Tell people about your poll..."></textarea>
+
+                <button type="submit" class="primary-button">
+                    ✨ Create My Poll
+                </button>
+
+                <p id="createMessage" class="message" aria-live="polite"></p>
+            </form>
+        </section>
+
+        <aside class="panel preview-box">
+            <div class="preview-label">LIVE PREVIEW</div>
+            <h2 id="previewQuestion" class="preview-question"></h2>
+
+            <div class="preview-options" id="previewOptions">
+                <div class="preview-option">
+                    <img id="previewImageA"
+                         src="https://placehold.co/500x300/d1fae5/0f766e?text=Option+1"
+                         alt="Option 1 preview">
+                    <h3 id="previewTitleA">Option 1</h3>
+                    <button type="button" disabled>Choose</button>
+                </div>
+
+                <div class="preview-option">
+                    <img id="previewImageB"
+                         src="https://placehold.co/500x300/d1fae5/0f766e?text=Option+2"
+                         alt="Option 2 preview">
+                    <h3 id="previewTitleB">Option 2</h3>
+                    <button type="button" disabled>Choose</button>
+                </div>
+
+                <div class="preview-option" id="previewCardC" hidden>
+                    <img id="previewImageC"
+                         src="https://placehold.co/500x300/d1fae5/0f766e?text=Option+3"
+                         alt="Option 3 preview">
+                    <h3 id="previewTitleC">Option 3</h3>
+                    <button type="button" disabled>Choose</button>
+                </div>
+            </div>
+
+            <p id="previewDescription" class="preview-hint">
+                Your poll preview updates as you type and upload images.
+            </p>
+            <p class="preview-hint">
+                🔒 Your polls and images are saved in the shared database.
+            </p>
+        </aside>
+
+    </div>
+
+    <section class="saved-section">
+        <div class="saved-heading">
+            <div>
+                <h2>📌 My Created Polls</h2>
+                <p>Polls you created and saved in the shared database.</p>
+            </div>
+        </div>
+        <div id="savedPolls" class="saved-grid"></div>
+    </section>
+
+</main>
+
+<footer>
+    © 2026 This or That · Create. Share. Choose. 💚
+</footer>
+
+<script src="database.js"></script>
+<script>
+
+const form = document.getElementById("createForm");
+const message = document.getElementById("createMessage");
+const enableThird = document.getElementById("enableThird");
+const thirdEditor = document.getElementById("thirdEditor");
+
+const imageData = { A: "", B: "", C: "" };
+
+function readPolls() {
+    return PollDatabase.getPolls(PollDatabase.getClientId());
+}
+
+function compressImage(file) {
+    return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith("image/")) {
+            reject(new Error("Please choose a valid image file."));
+            return;
+        }
+
+        if (file.size > 12 * 1024 * 1024) {
+            reject(new Error("Please choose an image smaller than 12 MB."));
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Unable to read this image."));
+
+        reader.onload = () => {
+            const img = new Image();
+            img.onerror = () => reject(new Error("This image could not be opened."));
+
+            img.onload = () => {
+                const maxDimension = 900;
+                const scale = Math.min(
+                    1,
+                    maxDimension / Math.max(img.width, img.height)
+                );
+
+                const canvas = document.createElement("canvas");
+                canvas.width = Math.max(1, Math.round(img.width * scale));
+                canvas.height = Math.max(1, Math.round(img.height * scale));
+
+                canvas.getContext("2d").drawImage(
+                    img, 0, 0, canvas.width, canvas.height
+                );
+
+                resolve(canvas.toDataURL("image/jpeg", 0.78));
+            };
+
+            img.src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+function showUploadedImage(letter, data) {
+    imageData[letter] = data;
+
+    const box = document.getElementById("uploadBox" + letter);
+    const preview = document.getElementById("uploadPreview" + letter);
+
+    if (data) {
+        preview.src = data;
+        box.classList.add("has-image");
+    } else {
+        preview.removeAttribute("src");
+        box.classList.remove("has-image");
+    }
+
+    updateLivePreview();
+}
+
+function clearImage(letter) {
+    document.getElementById("imageInput" + letter).value = "";
+    showUploadedImage(letter, "");
+}
+
+["A", "B", "C"].forEach(letter => {
+    document.getElementById("imageInput" + letter)
+        .addEventListener("change", async event => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            message.textContent = "Preparing your image...";
+
+            try {
+                const data = await compressImage(file);
+                showUploadedImage(letter, data);
+                message.textContent = "Image ready!";
+            } catch (error) {
+                event.target.value = "";
+                message.textContent = error.message;
+            }
+        });
+});
+
+enableThird.addEventListener("change", () => {
+    const enabled = enableThird.checked;
+
+    thirdEditor.hidden = !enabled;
+    document.getElementById("newC").disabled = !enabled;
+    document.getElementById("imageInputC").disabled = !enabled;
+    document.getElementById("newC").required = enabled;
+    document.getElementById("imageInputC").required = enabled;
+    document.getElementById("previewCardC").hidden = !enabled;
+
+    if (!enabled) {
+        document.getElementById("newC").value = "";
+        clearImage("C");
+    }
+
+    updateLivePreview();
+});
+
+function updateLivePreview() {
+    const question = document.getElementById("pollQuestion").value.trim();
+    const titleA = document.getElementById("newA").value.trim();
+    const titleB = document.getElementById("newB").value.trim();
+    const titleC = document.getElementById("newC").value.trim();
+    const description = document.getElementById("pollDescription").value.trim();
+
+    document.getElementById("previewQuestion").textContent = question;
+    document.getElementById("previewTitleA").textContent = titleA || "Option 1";
+    document.getElementById("previewTitleB").textContent = titleB || "Option 2";
+    document.getElementById("previewTitleC").textContent = titleC || "Option 3";
+
+    document.getElementById("previewImageA").src =
+        imageData.A || "https://placehold.co/500x300/d1fae5/0f766e?text=Option+1";
+    document.getElementById("previewImageB").src =
+        imageData.B || "https://placehold.co/500x300/d1fae5/0f766e?text=Option+2";
+    document.getElementById("previewImageC").src =
+        imageData.C || "https://placehold.co/500x300/d1fae5/0f766e?text=Option+3";
+
+    document.getElementById("previewCardC").hidden = !enableThird.checked;
+    document.getElementById("previewOptions").classList.toggle(
+        "three", enableThird.checked
+    );
+
+    document.getElementById("previewDescription").textContent =
+        description || "Your poll preview updates as you type and upload images.";
+}
+
+[
+    "pollQuestion", "newCategory", "newA", "newB", "newC", "pollDescription"
+].forEach(id => {
+    document.getElementById(id).addEventListener("input", updateLivePreview);
+});
+
+form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const question = document.getElementById("pollQuestion").value.trim();
+    const category = document.getElementById("newCategory").value.trim();
+    const optionA = document.getElementById("newA").value.trim();
+    const optionB = document.getElementById("newB").value.trim();
+    const optionC = document.getElementById("newC").value.trim();
+
+    if (!category) {
+        message.textContent = "Please choose or enter a category.";
+        return;
+    }
+
+    if (!imageData.A || !imageData.B) {
+        message.textContent = "Please upload pictures for both required options.";
+        return;
+    }
+
+    if (enableThird.checked && !imageData.C) {
+        message.textContent = "Please upload a picture for Option 3.";
+        return;
+    }
+
+    const options = [
+        { name: optionA, image: imageData.A },
+        { name: optionB, image: imageData.B }
+    ];
+
+    if (enableThird.checked) {
+        options.push({ name: optionC, image: imageData.C });
+    }
+
+    const poll = {
+        question,
+        category,
+        description: document.getElementById("pollDescription").value.trim(),
+        options
+    };
+
+    try {
+        await PollDatabase.createPoll(poll);
+        message.textContent = "🎉 Your poll and images are saved to the database!";
+        await renderSavedPolls();
+    } catch (error) {
+        message.textContent = error.message;
+        return;
+    }
+
+    form.reset();
+    ["A", "B", "C"].forEach(clearImage);
+
+    enableThird.checked = false;
+    thirdEditor.hidden = true;
+    document.getElementById("newC").disabled = true;
+    document.getElementById("imageInputC").disabled = true;
+    document.getElementById("newC").required = false;
+    document.getElementById("imageInputC").required = false;
+    document.getElementById("previewCardC").hidden = true;
+
+    updateLivePreview();
+
+    document.getElementById("savedPolls").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+async function voteOnPoll(pollId, optionIndex) {
+    try {
+        await PollDatabase.castVote(pollId, optionIndex);
+        await renderSavedPolls();
+        message.textContent = "💚 Your vote has been recorded in the database.";
+    } catch (error) {
+        message.textContent = error.message;
+    }
+}
+
+async function deletePoll(pollId) {
+    if (!confirm("Delete this poll from the shared database?")) return;
+
+    try {
+        await PollDatabase.deletePoll(pollId);
+        await renderSavedPolls();
+    } catch (error) {
+        message.textContent = error.message;
+    }
+}
+
+async function downloadPollImage(pollId, optionIndex) {
+    const polls = await readPolls();
+    const poll = polls.find(item => item.id === pollId);
+    if (!poll || !poll.options[optionIndex]) return;
+
+    const link = document.createElement("a");
+    link.href = poll.options[optionIndex].image;
+    link.download = "poll-option-" + (optionIndex + 1) + ".jpg";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+
+async function renderSavedPolls() {
+    const container = document.getElementById("savedPolls");
+    const polls = await readPolls();
+
+    container.replaceChildren();
+
+    if (!polls.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent =
+            "No polls yet. Create your first poll above and it will appear here!";
+        container.appendChild(empty);
+        return;
+    }
+
+    polls.forEach(poll => {
+        const card = document.createElement("article");
+        card.className = "saved-poll";
+
+        const heading = document.createElement("h3");
+        heading.textContent = poll.question;
+        card.appendChild(heading);
+
+        const details = document.createElement("p");
+        details.textContent =
+            (poll.category || "Other") + " · " +
+            poll.options.length + " options · " +
+            poll.options.reduce(
+                (sum, option) => sum + (Number(option.votes) || 0), 0
+            ) + " vote(s)";
+        card.appendChild(details);
+
+        const images = document.createElement("div");
+        images.className = "poll-images";
+
+        poll.options.forEach(option => {
+            const img = document.createElement("img");
+            img.src = option.image;
+            img.alt = option.name;
+            images.appendChild(img);
+        });
+
+        card.appendChild(images);
+
+        poll.options.forEach((option, index) => {
+            const result = document.createElement("p");
+            result.textContent = option.name + ": " +
+                (Number(option.votes) || 0) + " vote(s)";
+            card.appendChild(result);
+        });
+
+        const actions = document.createElement("div");
+        actions.className = "poll-actions";
+
+        poll.options.forEach((option, index) => {
+            const voteButton = document.createElement("button");
+            voteButton.textContent = "Vote: " + option.name;
+            voteButton.addEventListener("click", () =>
+                voteOnPoll(poll.id, index)
+            );
+            actions.appendChild(voteButton);
+
+            const downloadButton = document.createElement("button");
+            downloadButton.textContent = "Download " + (index + 1) + " Image";
+            downloadButton.addEventListener("click", () =>
+                downloadPollImage(poll.id, index)
+            );
+            actions.appendChild(downloadButton);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete Poll";
+        deleteButton.addEventListener("click", () => deletePoll(poll.id));
+        actions.appendChild(deleteButton);
+
+        card.appendChild(actions);
+        container.appendChild(card);
+    });
+}
+
+/* Cursor-following colour spotlight */
+let cursorFrame = null;
+
+document.addEventListener("pointermove", event => {
+    if (event.pointerType === "touch") return;
+
+    if (cursorFrame) cancelAnimationFrame(cursorFrame);
+
+    cursorFrame = requestAnimationFrame(() => {
+        const x = event.clientX;
+        const y = event.clientY;
+        const hue = 145 + (x / window.innerWidth) * 85;
+
+        document.documentElement.style.setProperty("--mouse-x", x + "px");
+        document.documentElement.style.setProperty("--mouse-y", y + "px");
+        document.documentElement.style.setProperty("--cursor-hue", hue);
+
+        cursorFrame = null;
+    });
+});
+
+renderSavedPolls().catch(error => {
+    message.textContent = "Unable to load your polls: " + error.message;
+});
+updateLivePreview();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>This or That | Home</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7ff;
+    color: #172554;
+}
+
+/* NAVBAR */
+.navbar {
+    background: white;
+    padding: 16px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 12px #e5e7f5;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: bold;
+    color: #5547ff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #53617e;
+    font-size: 14px;
+}
+
+.nav-links a:hover,
+.nav-links .active {
+    color: #5547ff;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search {
+    width: 160px;
+    padding: 11px;
+    border: 1px solid #e1e5f4;
+    border-radius: 20px;
+    outline: none;
+}
+
+.search:focus {
+    border-color: #6255ff;
+}
+
+.btn {
+    border: none;
+    background: linear-gradient(90deg, #8b5cf6, #6255ff);
+    color: white;
+    padding: 11px 19px;
+    border-radius: 25px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+/* MAIN CONTAINER */
+.container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 25px;
+}
+
+/* HERO SECTION */
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: center;
+    gap: 30px;
+    padding: 40px;
+    background: linear-gradient(120deg, #ffffff, #f0eaff, #e3f2ff);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.hero h1 {
+    font-size: clamp(35px, 4vw, 55px);
+    line-height: 1.15;
+    margin-bottom: 18px;
+    color: #5147ef;
+}
+
+.hero h1 span {
+    color: #c34ce8;
+}
+
+.hero p {
+    color: #586581;
+    line-height: 1.8;
+    max-width: 400px;
+    margin-bottom: 25px;
+}
+
+.hero-images {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+}
+
+.hero-card {
+    background: white;
+    border-radius: 18px;
+    padding: 9px;
+    box-shadow: 0 12px 30px #c7c8e8;
+    min-width: 0;
+    transform: rotate(-3deg);
+}
+
+.hero-card:nth-child(3) {
+    transform: rotate(3deg);
+}
+
+.hero-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 13px;
+    display: block;
+}
+
+.hero-card h3 {
+    text-align: center;
+    padding: 12px 3px;
+    color: #27345d;
+    font-size: 15px;
+}
+
+.versus {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: #5147ef;
+    box-shadow: 0 3px 12px #c7c8e8;
+    z-index: 2;
+}
+
+/* STATISTICS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: white;
+    border-radius: 18px;
+    margin: 25px 0 35px;
+    padding: 22px 10px;
+    box-shadow: 0 4px 18px #e7eafd;
+}
+
+.stat {
+    text-align: center;
+    border-right: 1px solid #e8ebf7;
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+.stat h2 {
+    color: #5547ff;
+    margin: 8px 0;
+}
+
+.stat p {
+    font-size: 13px;
+    color: #75819b;
+}
+
+/* SECTION HEADING */
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 10px;
+}
+
+.section-heading h2 {
+    font-size: 24px;
+}
+
+.section-heading a {
+    color: #5547ff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* CATEGORY FILTERS */
+.category-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0 25px;
+}
+
+.category-btn {
+    padding: 10px 16px;
+    border: 1px solid #e0e4f5;
+    border-radius: 25px;
+    background: white;
+    color: #53617e;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 13px;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background: #6255ff;
+    color: white;
+    border-color: #6255ff;
+}
+
+/* POLL GRID */
+.poll-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+/* POLL CARD */
+.poll-card {
+    background: white;
+    padding: 16px;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px #e5e9f7;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 0;
+}
+
+.poll-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #d9def5;
+}
+
+/* TWO OPTIONS SIDE BY SIDE */
+.poll-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 35px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+}
+
+.option {
+    min-width: 0;
+    text-align: center;
+    overflow: hidden;
+    background: #fafaff;
+    border-radius: 12px;
+}
+
+.option img {
+    width: 100%;
+    height: 165px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+.option h3 {
+    font-size: 14px;
+    margin: 12px 4px;
+    overflow-wrap: anywhere;
+    color: #27345d;
+}
+
+.versus-small {
+    display: grid;
+    place-items: center;
+    background: #f0efff;
+    color: #6255ff;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.poll-description {
+    color: #7b86a0;
+    font-size: 13px;
+    margin: 15px 0;
+    line-height: 1.5;
+}
+
+.vote-link {
+    display: block;
+    text-align: center;
+    background: #f0efff;
+    color: #5547ff;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.vote-link:hover {
+    background: #6255ff;
+    color: white;
+}
+
+/* EMPTY SEARCH RESULT */
+.no-results {
+    display: none;
+    background: white;
+    text-align: center;
+    padding: 35px;
+    margin-top: 20px;
+    border-radius: 15px;
+    color: #75819b;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    color: #7b86a0;
+    padding: 30px;
+    font-size: 13px;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 30px;
+    }
+
+    .hero-images {
+        max-width: 600px;
+        width: 100%;
+        margin: 15px auto 0;
+    }
+
+    .poll-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .option img {
+        height: 200px;
+    }
+
+    .navbar {
+        justify-content: center;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 520px) {
+    .container {
+        padding: 14px;
+    }
+
+    .navbar {
+        padding: 16px;
+        gap: 15px;
+    }
+
+    .logo {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links {
+        justify-content: center;
+        gap: 13px;
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search {
+        width: 65%;
+    }
+
+    .hero {
+        padding: 23px 15px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero-images {
+        grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .hero-card {
+        padding: 6px;
+    }
+
+    .hero-card img {
+        height: 120px;
+    }
+
+    .hero-card h3 {
+        font-size: 12px;
+    }
+
+    .versus {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+
+    .stats {
+        padding: 18px 5px;
+    }
+
+    .stat h2 {
+        font-size: 19px;
+    }
+
+    .stat p {
+        font-size: 10px;
+    }
+
+    .section-heading h2 {
+        font-size: 20px;
+    }
+
+    .category-btn {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+
+    .poll-card {
+        padding: 10px;
+    }
+
+    .poll-options {
+        grid-template-columns: minmax(0, 1fr) 27px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .option img {
+        height: 125px;
+    }
+
+    .option h3 {
+        font-size: 12px;
+        margin: 10px 3px;
+    }
+
+    .versus-small {
+        width: 27px;
+        height: 27px;
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<header class="navbar">
+
+    <div class="logo">💜 This or That</div>
+
+    <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="results.html">Results</a>
+    </nav>
+
+    <style>
+.nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search {
+    width: 160px;
+    padding: 11px;
+    border: 1px solid #e1e5f4;
+    border-radius: 20px;
+    outline: none;
+}
+
+.search:focus {
+    border-color: #6255ff;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #6255ff;
+    border-radius: 50%;
+    padding: 3px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-link:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px #d9d4ff;
+}
+
+.profile-picture {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 520px) {
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search {
+        width: 65%;
+    }
+
+    .profile-picture {
+        width: 38px;
+        height: 38px;
+    }
+}
+</style>
+
+<div class="nav-actions">
+    <input
+        class="search"
+        id="searchBox"
+        type="search"
+        placeholder="Search choices..."
+        aria-label="Search choices">
+
+    <a href="profile.html" class="profile-link" aria-label="Open profile">
+        <img
+            class="profile-picture"
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80"
+            alt="Profile picture">
+    </a>
+</div>
+
+</header>
+
+<main class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <div>
+            <h1>
+                Small choices.<br>
+                <span>Big opinions.</span>
+            </h1>
+
+            <p>
+                Coffee or tea? Beach or mountains?
+                Cast your vote, explore fun choices, and discover
+                what other people prefer!
+            </p>
+
+            <a href="explore.html" class="btn">
+                Explore Choices →
+            </a>
+        </div>
+
+        <div class="hero-images">
+
+            <div class="hero-card">
+                <img
+                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80"
+                    alt="Cup of coffee">
+
+                <h3>☕ Coffee</h3>
+            </div>
+
+            <div class="versus">VS</div>
+
+            <div class="hero-card">
+                <img
+                    src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80"
+                    alt="Cup of tea">
+
+                <h3>🍵 Tea</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="stats">
+
+        <div class="stat">
+            <div>👥</div>
+            <h2>10K+</h2>
+            <p>Daily Voters</p>
+        </div>
+
+        <div class="stat">
+            <div>👍</div>
+            <h2>50K+</h2>
+            <p>Total Votes</p>
+        </div>
+
+        <div class="stat">
+            <div>✨</div>
+            <h2>1000+</h2>
+            <p>Fun Choices</p>
+        </div>
+
+    </section>
+
+    <!-- POPULAR CHOICES -->
+    <section class="popular-section">
+
+        <div class="section-heading">
+            <h2>Popular Choices 🔥</h2>
+            <a href="explore.html">See All →</a>
+        </div>
+
+        <!-- CATEGORY BUTTONS -->
+        <div class="category-list">
+
+            <button class="category-btn active"
+                    onclick="filterCategory('all', this)">
+                All Choices
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('food', this)">
+                🍕 Food
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('nature', this)">
+                🌿 Nature
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('politics', this)">
+                🏛️ Politics
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('age', this)">
+                🎂 Age & Lifestyle
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('salary', this)">
+                💰 Salary
+            </button>
+
+            <button class="category-btn"
+                    onclick="filterCategory('accessories', this)">
+                👜 Accessories
+            </button>
+
+        </div>
+
+        <!-- POLL CARDS -->
+        <div class="poll-grid" id="pollGrid">
+
+            <!-- 1. COFFEE VS TEA -->
+            <article class="poll-card"
+                     data-category="food"
+                     data-search="coffee tea drinks beverage">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80"
+                            alt="Coffee">
+
+                        <h3>☕ Coffee</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"
+                            alt="Tea">
+
+                        <h3>🍵 Tea</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    ☕ Which drink do you prefer?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=1">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 2. PIZZA VS BURGER -->
+            <article class="poll-card"
+                     data-category="food"
+                     data-search="pizza burger food fast food">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=400&q=80"
+                            alt="Pizza">
+
+                        <h3>🍕 Pizza</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80"
+                            alt="Burger">
+
+                        <h3>🍔 Burger</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    😋 Choose your favourite food.
+                </p>
+
+                <a class="vote-link" href="vote.html?id=2">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 3. CATS VS DOGS -->
+            <article class="poll-card"
+                     data-category="animals"
+                     data-search="cats dogs animals pets">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=400&q=80"
+                            alt="Cat">
+
+                        <h3>🐱 Cats</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=80"
+                            alt="Dog">
+
+                        <h3>🐶 Dogs</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    🐾 Which pet would you choose?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=3">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 4. FOREST VS OCEAN -->
+            <article class="poll-card"
+                     data-category="nature"
+                     data-search="forest ocean sea nature">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80"
+                            alt="Forest">
+
+                        <h3>🌲 Forest</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=400&q=80"
+                            alt="Ocean">
+
+                        <h3>🌊 Ocean</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    🌍 Pick your favourite nature view.
+                </p>
+
+                <a class="vote-link" href="vote.html?id=4">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 5. CITY VS ENVIRONMENT -->
+            <article class="poll-card"
+                     data-category="politics"
+                     data-search="politics city development environment public priorities">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80"
+                            alt="City">
+
+                        <h3>🏙️ City Development</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80"
+                            alt="Green forest">
+
+                        <h3>🌳 Environment</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    🗳️ Which public priority matters more?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=5">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 6. MORNING VS NIGHT -->
+            <article class="poll-card"
+                     data-category="age"
+                     data-search="age lifestyle morning night sunrise sleep">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=400&q=80"
+                            alt="Sunrise">
+
+                        <h3>🌅 Morning Person</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80"
+                            alt="Night sky">
+
+                        <h3>🌙 Night Owl</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    ⏰ Which lifestyle suits you?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=6">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 7. HIGH SALARY VS WORK-LIFE BALANCE -->
+            <article class="poll-card"
+                     data-category="salary"
+                     data-search="salary money career job work life balance">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=400&q=80"
+                            alt="Money">
+
+                        <h3>💰 Higher Salary</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=400&q=80"
+                            alt="Comfortable workspace">
+
+                        <h3>⚖️ Work-Life Balance</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    💼 What matters more in a career?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=7">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 8. GOLD VS SILVER -->
+            <article class="poll-card"
+                     data-category="accessories"
+                     data-search="accessories gold silver jewellery jewelry">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=400&q=80"
+                            alt="Gold jewellery">
+
+                        <h3>✨ Gold</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=400&q=80"
+                            alt="Silver jewellery">
+
+                        <h3>💎 Silver</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    💍 Pick your favourite accessory style.
+                </p>
+
+                <a class="vote-link" href="vote.html?id=8">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 9. BEACH VS MOUNTAINS -->
+            <article class="poll-card"
+                     data-category="nature"
+                     data-search="beach mountains travel vacation holiday">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80"
+                            alt="Beach">
+
+                        <h3>🏖️ Beach</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80"
+                            alt="Mountains">
+
+                        <h3>🏔️ Mountains</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    ✈️ Choose your dream holiday.
+                </p>
+
+                <a class="vote-link" href="vote.html?id=9">
+                    Vote Now →
+                </a>
+
+            </article>
+
+            <!-- 10. ONLINE VS OFFLINE SHOPPING -->
+            <article class="poll-card"
+                     data-category="accessories"
+                     data-search="online offline shopping accessories fashion">
+
+                <div class="poll-options">
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=400&q=80"
+                            alt="Online shopping">
+
+                        <h3>📱 Online Shopping</h3>
+                    </div>
+
+                    <span class="versus-small">VS</span>
+
+                    <div class="option">
+                        <img
+                            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80"
+                            alt="Physical shop">
+
+                        <h3>🛍️ Store Shopping</h3>
+                    </div>
+
+                </div>
+
+                <p class="poll-description">
+                    🛒 How do you prefer to shop?
+                </p>
+
+                <a class="vote-link" href="vote.html?id=10">
+                    Vote Now →
+                </a>
+
+            </article>
+
+        </div>
+
+        <div class="no-results" id="noResults">
+            <h3>😕 No choices found</h3>
+            <p style="margin-top: 10px;">
+                Try another search or category.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+    © 2026 This or That · Small Choices. Big Opinions. 💜
+</footer>
+
+<script>
+const searchBox = document.getElementById("searchBox");
+const pollCards = document.querySelectorAll(".poll-card");
+const noResults = document.getElementById("noResults");
+
+let selectedCategory = "all";
+
+/* CATEGORY FILTER */
+function filterCategory(category, button) {
+    selectedCategory = category;
+
+    document.querySelectorAll(".category-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    applyFilters();
+}
+
+/* SEARCH AND CATEGORY FILTER */
+function applyFilters() {
+    const search = searchBox.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    pollCards.forEach(card => {
+        const category = card.dataset.category;
+
+        const matchesCategory =
+            selectedCategory === "all" ||
+            category === selectedCategory;
+
+        const searchContent =
+            (card.dataset.search + " " + card.textContent).toLowerCase();
+
+        const matchesSearch = searchContent.includes(search);
+
+        if (matchesCategory && matchesSearch) {
+            card.style.display = "";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    noResults.style.display =
+        visibleCount === 0 ? "block" : "none";
+}
+
+searchBox.addEventListener("input", applyFilters);
+</script>
+
+</body>
+</html>

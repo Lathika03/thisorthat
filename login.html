@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>This or That | Login & Sign Up</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #9333ea;
+    --secondary: #ec4899;
+    --text: #38234d;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    color: var(--text);
+    overflow-x: hidden;
+    position: relative;
+    isolation: isolate;
+
+    background: linear-gradient(
+        -45deg,
+        #fbc2eb,
+        #a6c1ee,
+        #fdf2c4,
+        #c2ffd8
+    );
+    background-size: 400% 400%;
+    animation: backgroundShift 14s ease infinite;
+    transition: background 1s ease;
+}
+
+@keyframes backgroundShift {
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 100% 50%; }
+    50%  { background-position: 100% 100%; }
+    75%  { background-position: 0% 100%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating colourful splashes */
+.splash {
+    position: fixed;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    filter: blur(75px);
+    opacity: 0.55;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatSplash 10s ease-in-out infinite alternate;
+}
+
+.splash-one {
+    background: #ff7eb3;
+    top: -100px;
+    left: -90px;
+}
+
+.splash-two {
+    background: #8b7bff;
+    bottom: -110px;
+    right: -80px;
+    animation-delay: -4s;
+}
+
+.splash-three {
+    width: 230px;
+    height: 230px;
+    background: #ffe66d;
+    top: 35%;
+    right: 15%;
+    animation-delay: -6s;
+}
+
+@keyframes floatSplash {
+    from {
+        transform: translate(0, 0) scale(0.9);
+    }
+    to {
+        transform: translate(90px, 80px) scale(1.25);
+    }
+}
+
+/* Birthday-style card */
+.container {
+    width: 100%;
+    max-width: 1000px;
+    min-height: 590px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(255, 255, 255, 0.87);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(70, 35, 110, 0.2);
+    animation: birthdayPop 0.9s cubic-bezier(.2, 1.4, .5, 1) both;
+    position: relative;
+}
+
+@keyframes birthdayPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.65) rotate(-4deg);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.03) rotate(1deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+    }
+}
+
+/* Decorative party confetti */
+.confetti {
+    position: fixed;
+    top: -20px;
+    width: 9px;
+    height: 15px;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: confettiFall linear infinite;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+    }
+    100% {
+        transform: translateY(110vh) rotate(720deg);
+    }
+}
+
+/* Left welcome panel */
+.welcome {
+    padding: 50px 40px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(145deg, #7c3aed, #d946ef, #fb7185);
+    background-size: 250% 250%;
+    animation: panelShift 9s ease infinite alternate;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes panelShift {
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
+}
+
+.brand {
+    position: absolute;
+    top: 30px;
+    left: 35px;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.brand span {
+    color: #ffe4f2;
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 1;
+}
+
+.welcome h1 {
+    font-size: clamp(32px, 4vw, 45px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.welcome p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #fff0ff;
+}
+
+.choice-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 35px 0;
+}
+
+.choice {
+    width: 115px;
+    height: 125px;
+    background: rgba(255, 255, 255, 0.19);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
+    transform: rotate(-5deg);
+    transition: transform 0.3s;
+}
+
+.choice:last-child {
+    transform: rotate(5deg);
+}
+
+.choice:hover {
+    transform: translateY(-8px) rotate(0);
+}
+
+.choice span {
+    font-size: 43px;
+}
+
+.choice strong {
+    font-size: 14px;
+}
+
+.vs {
+    font-weight: 900;
+    color: #ffe1f1;
+    font-size: 16px;
+}
+
+.bottom-note {
+    font-size: 13px !important;
+    margin-top: 20px;
+}
+
+/* Right form */
+.form-section {
+    padding: 45px 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tabs {
+    display: flex;
+    padding: 5px;
+    background: #f6f0fb;
+    border-radius: 14px;
+    margin-bottom: 30px;
+}
+
+.tabs button {
+    width: 50%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #786584;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    color: white;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    box-shadow: 0 4px 12px #9333ea35;
+}
+
+.form-section h2 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #95879f;
+    margin-bottom: 25px;
+}
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #554363;
+}
+
+.field input {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid #e7ddec;
+    border-radius: 12px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #a855f71c;
+}
+
+.password-wrap {
+    position: relative;
+}
+
+.password-wrap input {
+    padding-right: 55px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #8b5ca7;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    margin: 3px 0 22px;
+    color: #776582;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-options a,
+.switch-text a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    background-size: 200% 100%;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px #9333ea30;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    background-position: 100% 0;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0;
+    color: #aa9bb3;
+    font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #eee5f2;
+}
+
+.google-btn {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #e7ddec;
+    background: white;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #574663;
+    cursor: pointer;
+}
+
+.google-btn:hover {
+    background: #faf6ff;
+}
+
+.switch-text {
+    text-align: center;
+    margin-top: 23px;
+    font-size: 13px;
+    color: #887b92;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.message {
+    font-size: 13px;
+    margin-top: 14px;
+    text-align: center;
+    color: var(--primary);
+    line-height: 1.5;
+}
+
+/* Mobile view */
+@media (max-width: 720px) {
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+        max-width: 430px;
+    }
+
+    .welcome {
+        padding: 75px 25px 25px;
+        text-align: center;
+    }
+
+    .brand {
+        top: 23px;
+        left: 25px;
+    }
+
+    .welcome h1 {
+        font-size: 31px;
+    }
+
+    .choice-art {
+        margin: 22px 0 10px;
+    }
+
+    .choice {
+        width: 90px;
+        height: 95px;
+    }
+
+    .choice span {
+        font-size: 32px;
+    }
+
+    .bottom-note {
+        display: none;
+    }
+
+    .form-section {
+        padding: 30px 23px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="splash splash-one"></div>
+<div class="splash splash-two"></div>
+<div class="splash splash-three"></div>
+
+<div class="container">
+
+    <section class="welcome">
+        <div class="brand">💜 THIS <span>OR</span> THAT</div>
+
+        <div class="welcome-content">
+            <h1>Every choice<br>tells your story.</h1>
+
+            <p>
+                Discover what people love, share your opinions,
+                and find out which side wins!
+            </p>
+
+            <div class="choice-art">
+                <div class="choice">
+                    <span>☕</span>
+                    <strong>COFFEE</strong>
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="choice">
+                    <span>🍵</span>
+                    <strong>TEA</strong>
+                </div>
+            </div>
+
+            <p class="bottom-note">
+                🎉 Choose your side. Make your voice count!
+            </p>
+        </div>
+    </section>
+
+    <section class="form-section">
+
+        <div class="tabs">
+            <button type="button" id="loginTab"
+                    class="active" onclick="showForm('login')">
+                Log In
+            </button>
+
+            <button type="button" id="signupTab"
+                    onclick="showForm('signup')">
+                Sign Up
+            </button>
+        </div>
+
+        <form id="loginForm">
+            <h2>Welcome back! 👋</h2>
+            <p class="subtitle">Log in to continue your journey.</p>
+
+            <div class="field">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail"
+                       placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="loginPassword">Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="loginPassword"
+                           placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password"
+                            onclick="togglePassword('loginPassword', this)">
+                        SHOW
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label class="remember">
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+
+                <a href="#" onclick="forgotPassword(event)">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button class="submit-btn" type="submit">Log In →</button>
+
+            <div class="divider">or continue with</div>
+
+            <button type="button" class="google-btn"
+                    onclick="googleMessage()">
+                🌐 Continue with Google
+            </button>
+
+            <p class="switch-text">
+                New here?
+                <a href="#" onclick="showForm('signup'); return false;">
+                    Create an account
+                </a>
+            </p>
+        </form>
+
+        <form id="signupForm" class="hidden">
+            <h2>Create account ✨</h2>
+            <p class="subtitle">Join the fun. Your choices matter!</p>
+
+            <div class="field">
+                <label for="signupName">Full Name</label>
+                <input type="text" id="signupName"
+                       placeholder="Enter your name" required>
+            </div>
+
+            <div class="field">
+                <label for="signupEmail">Email Address</label>
+                <input type="email" id="signupEmail"
+                       placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="signupPassword">Create Password</label>
+                <div class="password-wrap">
+                    <input type="password" id="signupPassword"
+                           placeholder="At least 8 characters"
+                           minlength="8" required>
+                    <button type="button" class="toggle-password"
+                            onclick="togglePassword('signupPassword', this)">
+                        SHOW
+                    </button>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword"
+                       placeholder="Enter password again"
+                       minlength="8" required>
+            </div>
+
+            <button class="submit-btn" type="submit">
+                Create Account →
+            </button>
+
+            <p class="switch-text">
+                Already have an account?
+                <a href="#" onclick="showForm('login'); return false;">
+                    Log in
+                </a>
+            </p>
+        </form>
+
+        <p id="message" class="message" aria-live="polite"></p>
+
+    </section>
+</div>
+
+<script>
+// Switch between login and sign-up
+function showForm(type) {
+    document.getElementById("loginForm").classList.toggle(
+        "hidden", type !== "login"
+    );
+
+    document.getElementById("signupForm").classList.toggle(
+        "hidden", type !== "signup"
+    );
+
+    document.getElementById("loginTab").classList.toggle(
+        "active", type === "login"
+    );
+
+    document.getElementById("signupTab").classList.toggle(
+        "active", type === "signup"
+    );
+
+    document.getElementById("message").textContent = "";
+}
+
+// Show or hide passwords
+function togglePassword(id, button) {
+    const field = document.getElementById(id);
+    const visible = field.type === "password";
+
+    field.type = visible ? "text" : "password";
+    button.textContent = visible ? "HIDE" : "SHOW";
+}
+
+// Sign-up validation
+document.getElementById("signupForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        const password =
+            document.getElementById("signupPassword").value;
+
+        const confirm =
+            document.getElementById("confirmPassword").value;
+
+        if (password !== confirm) {
+            document.getElementById("message").textContent =
+                "❌ Passwords do not match.";
+            return;
+        }
+
+        document.getElementById("message").textContent =
+            "🎉 Details validated! Connect an authentication backend to create your account.";
+    }
+);
+
+// Login demonstration
+document.getElementById("loginForm").addEventListener(
+    "submit", function(event) {
+        event.preventDefault();
+
+        document.getElementById("message").textContent =
+            "Connect your authentication backend to log in securely.";
+    }
+);
+
+function forgotPassword(event) {
+    event.preventDefault();
+
+    document.getElementById("message").textContent =
+        "Password recovery requires a configured authentication service.";
+}
+
+function googleMessage() {
+    document.getElementById("message").textContent =
+        "Google sign-in requires Google OAuth configuration.";
+}
+
+// Birthday-style falling confetti
+const confettiColors = [
+    "#ff4fa3", "#9b5de5", "#00bbf9",
+    "#fee440", "#00f5d4", "#ff8c42"
+];
+
+for (let i = 0; i < 28; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti";
+
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.backgroundColor =
+        confettiColors[Math.floor(Math.random() * confettiColors.length)];
+
+    piece.style.animationDuration = (5 + Math.random() * 7) + "s";
+    piece.style.animationDelay = (-Math.random() * 10) + "s";
+
+    document.body.appendChild(piece);
+}
+</script>
+
+</body>
+</html>

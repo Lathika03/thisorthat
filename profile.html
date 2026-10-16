@@ -1,0 +1,738 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | This or That</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --purple: #8b5cf6;
+            --dark-purple: #6d28d9;
+            --light-purple: #f3e8ff;
+            --text: #29243a;
+            --muted: #77718a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: #f8f6ff;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 18px 7%;
+            background: white;
+            box-shadow: 0 3px 18px #34205b0c;
+        }
+
+        .logo {
+            color: var(--dark-purple);
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #625b73;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--dark-purple);
+        }
+
+        .container {
+            width: min(1000px, 92%);
+            margin: 35px auto;
+        }
+
+        .welcome {
+            margin-bottom: 24px;
+        }
+
+        .welcome h1 {
+            margin-bottom: 8px;
+            font-size: clamp(27px, 4vw, 36px);
+        }
+
+        .welcome p {
+            color: var(--muted);
+        }
+
+        .profile-card {
+            position: relative;
+            overflow: hidden;
+            padding: 32px;
+            background: white;
+            border: 1px solid #eee7ff;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px #39205e0c;
+        }
+
+        .profile-banner {
+            position: absolute;
+            inset: 0 0 auto;
+            height: 135px;
+            background: linear-gradient(
+                120deg, #c4b5fd, #e9d5ff, #f5d0fe
+            );
+        }
+
+        .profile-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 22px;
+            padding-top: 48px;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            display: grid;
+            width: 118px;
+            height: 118px;
+            place-items: center;
+            overflow: hidden;
+            border: 5px solid white;
+            border-radius: 50%;
+            background: var(--light-purple);
+            color: var(--dark-purple);
+            font-size: 42px;
+            font-weight: bold;
+            box-shadow: 0 4px 18px #30204b15;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-button {
+            position: absolute;
+            right: 0;
+            bottom: 3px;
+            width: 35px;
+            height: 35px;
+            border: 2px solid white;
+            border-radius: 50%;
+            background: var(--dark-purple);
+            color: white;
+            cursor: pointer;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .profile-info h2 {
+            margin: 0 0 8px;
+            font-size: 27px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .member-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: var(--light-purple);
+            color: var(--dark-purple);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 11px 17px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: var(--dark-purple);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5b21b6;
+        }
+
+        .btn-light {
+            background: var(--light-purple);
+            color: var(--dark-purple);
+        }
+
+        .section-title {
+            margin: 32px 0 16px;
+            font-size: 21px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            padding: 22px;
+            border: 1px solid #eee7ff;
+            border-radius: 18px;
+            background: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px #39205e10;
+        }
+
+        .stat-icon {
+            display: grid;
+            width: 43px;
+            height: 43px;
+            place-items: center;
+            margin-bottom: 15px;
+            border-radius: 14px;
+            background: var(--light-purple);
+            font-size: 21px;
+        }
+
+        .stat-number {
+            margin: 0;
+            font-size: 29px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .footer {
+            padding: 28px 12px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        dialog {
+            width: min(440px, 92%);
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 26px;
+            border: none;
+            border-radius: 20px;
+            color: var(--text);
+            box-shadow: 0 20px 70px #20123a35;
+        }
+
+        dialog::backdrop {
+            background: #1d123b88;
+            backdrop-filter: blur(4px);
+        }
+
+        dialog h2 {
+            margin-top: 0;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin: 16px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ded6ed;
+            border-radius: 10px;
+            background: white;
+            color: var(--text);
+            font: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: 2px solid #c4b5fd;
+            border-color: var(--purple);
+        }
+
+        .form-group textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        .dialog-actions {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 16px 5%;
+            }
+
+            nav {
+                gap: 13px;
+                font-size: 14px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .profile-content {
+                gap: 14px;
+            }
+
+            .avatar {
+                width: 92px;
+                height: 92px;
+            }
+
+            .profile-info h2 {
+                font-size: 22px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 16px;
+            }
+
+            .stat-icon {
+                flex-shrink: 0;
+                margin: 0;
+            }
+
+            .profile-content > .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">💜 This or That</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="results.html">Results</a>
+        <a href="profile.html" class="active">Profile</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <div class="welcome">
+        <h1>My Profile 👋</h1>
+        <p>Your choices, your activity, your community.</p>
+    </div>
+
+    <section class="profile-card">
+        <div class="profile-banner"></div>
+
+        <div class="profile-content">
+
+            <div class="avatar-wrap">
+                <div class="avatar" id="avatar">
+                    <span>G</span>
+                </div>
+
+                <button
+                    type="button"
+                    class="photo-button"
+                    id="changePhotoBtn"
+                    aria-label="Change profile picture"
+                    title="Change profile picture"
+                >📷</button>
+
+                <input
+                    type="file"
+                    id="photoInput"
+                    accept="image/*"
+                    hidden
+                >
+            </div>
+
+            <div class="profile-info">
+                <h2 id="profileName">Guest User</h2>
+                <p id="profileBio">Choice lover | Community member</p>
+                <p id="profileEmail">Add your email address</p>
+
+                <span class="member-badge">
+                    💜 This or That Member
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-primary"
+                id="editProfileBtn"
+            >
+                ✏️ Edit Profile
+            </button>
+
+        </div>
+    </section>
+
+    <h2 class="section-title">📊 My Activity</h2>
+
+    <section class="stats">
+
+        <article class="stat-card">
+            <div class="stat-icon">🗳️</div>
+            <div>
+                <p class="stat-number" id="activityVotes">0</p>
+                <p class="stat-label">Votes cast</p>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon">✨</div>
+            <div>
+                <p class="stat-number" id="activityCreated">0</p>
+                <p class="stat-label">Choices created</p>
+            </div>
+        </article>
+
+        <article class="stat-card">
+            <div class="stat-icon">🔖</div>
+            <div>
+                <p class="stat-number" id="activitySaved">0</p>
+                <p class="stat-label">Saved choices</p>
+            </div>
+        </article>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+    Made with 💜 for the This or That community
+</footer>
+
+<!-- Edit Profile Dialog -->
+<dialog id="editDialog">
+    <form id="profileForm">
+        <h2>✏️ Edit Profile</h2>
+        <p class="muted">Update your personal information below.</p>
+
+        <div class="form-group">
+            <label for="nameInput">Display name</label>
+            <input
+                id="nameInput"
+                type="text"
+                maxlength="40"
+                placeholder="Enter your name"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="emailInput">Email address</label>
+            <input
+                id="emailInput"
+                type="email"
+                maxlength="100"
+                placeholder="you@example.com"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="bioInput">About me</label>
+            <textarea
+                id="bioInput"
+                maxlength="160"
+                placeholder="Tell the community about yourself..."
+            ></textarea>
+        </div>
+
+        <div class="dialog-actions">
+            <button
+                class="btn btn-light"
+                type="button"
+                id="cancelEditBtn"
+            >
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" type="submit">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+    const defaultProfile = {
+        name: "Guest User",
+        email: "",
+        bio: "Choice lover | Community member",
+        photo: ""
+    };
+
+    const storageKey = "thisOrThatProfile";
+
+    const $ = id => document.getElementById(id);
+
+    function loadProfile() {
+        try {
+            const saved = JSON.parse(
+                localStorage.getItem(storageKey) || "{}"
+            );
+
+            return {
+                ...defaultProfile,
+                ...saved
+            };
+        } catch {
+            return { ...defaultProfile };
+        }
+    }
+
+    let profile = loadProfile();
+
+    function renderProfile() {
+        $("profileName").textContent =
+            profile.name || "Guest User";
+
+        $("profileBio").textContent =
+            profile.bio || "Choice lover | Community member";
+
+        $("profileEmail").textContent =
+            profile.email || "Add your email address";
+
+        const avatar = $("avatar");
+        avatar.replaceChildren();
+
+        if (profile.photo) {
+            const img = document.createElement("img");
+            img.src = profile.photo;
+            img.alt = "Profile picture";
+            avatar.appendChild(img);
+        } else {
+            const initial = document.createElement("span");
+            initial.textContent =
+                (profile.name || "G").trim().charAt(0).toUpperCase() || "G";
+
+            avatar.appendChild(initial);
+        }
+    }
+
+    function saveProfile() {
+        try {
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(profile)
+            );
+            return true;
+        } catch {
+            alert(
+                "Unable to save your profile. Try a smaller image."
+            );
+            return false;
+        }
+    }
+
+    // Open the Edit Profile form.
+    $("editProfileBtn").addEventListener("click", () => {
+        $("nameInput").value = profile.name;
+        $("emailInput").value = profile.email;
+        $("bioInput").value = profile.bio;
+
+        $("editDialog").showModal();
+    });
+
+    // Close the form without saving.
+    $("cancelEditBtn").addEventListener("click", () => {
+        $("editDialog").close();
+    });
+
+    // Save updated profile information.
+    $("profileForm").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const oldProfile = { ...profile };
+
+        profile.name =
+            $("nameInput").value.trim() || "Guest User";
+
+        profile.email =
+            $("emailInput").value.trim();
+
+        profile.bio =
+            $("bioInput").value.trim() ||
+            "Choice lover | Community member";
+
+        if (saveProfile()) {
+            renderProfile();
+            $("editDialog").close();
+        } else {
+            profile = oldProfile;
+        }
+    });
+
+    // Open the device image picker.
+    $("changePhotoBtn").addEventListener("click", () => {
+        $("photoInput").click();
+    });
+
+    // Upload and save the profile picture.
+    $("photoInput").addEventListener("change", event => {
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("Please select a valid image.");
+            event.target.value = "";
+            return;
+        }
+
+        if (file.size > 3 * 1024 * 1024) {
+            alert("Choose an image smaller than 3 MB.");
+            event.target.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const oldPhoto = profile.photo;
+            profile.photo = reader.result;
+
+            if (saveProfile()) {
+                renderProfile();
+            } else {
+                profile.photo = oldPhoto;
+            }
+
+            event.target.value = "";
+        };
+
+        reader.onerror = () => {
+            alert("Could not read that image. Please try again.");
+            event.target.value = "";
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    // Read activity totals from localStorage.
+    // Change these key names if your other pages use different keys.
+    function showActivity(elementId, keys) {
+        for (const key of keys) {
+            const value = localStorage.getItem(key);
+
+            if (
+                value !== null &&
+                value.trim() !== "" &&
+                Number.isFinite(Number(value))
+            ) {
+                $(elementId).textContent =
+                    Math.max(0, Number(value));
+
+                return;
+            }
+        }
+
+        $(elementId).textContent = "0";
+    }
+
+    renderProfile();
+
+    showActivity("activityVotes", [
+        "thisOrThatVotes",
+        "votesCast",
+        "activityVotes"
+    ]);
+
+    showActivity("activityCreated", [
+        "thisOrThatCreated",
+        "choicesCreated",
+        "activityCreated"
+    ]);
+
+    showActivity("activitySaved", [
+        "thisOrThatSaved",
+        "savedChoices",
+        "activitySaved"
+    ]);
+</script>
+
+</body>
+</html>

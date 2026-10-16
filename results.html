@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voting Results | This or That</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f4f1ff, #eef5ff);
+    color: #22264a;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 18px 6%;
+    background: white;
+    box-shadow: 0 3px 12px #dfe3f5;
+}
+
+.logo {
+    color: #6555f5;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    text-decoration: none;
+    color: #49365c;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #9333ea;
+}
+
+.container {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+}
+
+.card {
+    background: white;
+    width: 100%;
+    max-width: 760px;
+    padding: 32px 25px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 10px 35px #7e22ce18;
+}
+
+h1 {
+    margin-bottom: 12px;
+    font-size: 30px;
+    color: #30264d;
+}
+
+.question {
+    color: #6555f5;
+    margin: 15px 0 8px;
+    font-size: 25px;
+}
+
+.subtitle {
+    color: #8b8194;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* Result cards */
+.result-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.option {
+    padding: 18px 12px;
+    border-radius: 20px;
+    background: #faf8ff;
+    border: 1px solid #eee0ff;
+    min-width: 0;
+}
+
+.option img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.option h3 {
+    margin: 15px 0;
+    font-size: 19px;
+    color: #393052;
+}
+
+/* Percentage circles */
+.circle {
+    --percent: 50%;
+
+    width: 135px;
+    height: 135px;
+    margin: 15px auto;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: conic-gradient(
+        #6555f5 var(--percent),
+        #e9e5ff 0
+    );
+
+    transition: background 0.5s ease;
+}
+
+.circle.tea {
+    background: conic-gradient(
+        #ec4899 var(--percent),
+        #fce7f3 0
+    );
+}
+
+.circle-inner {
+    width: 103px;
+    height: 103px;
+    border-radius: 50%;
+    background: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.percentage {
+    font-size: 27px;
+    font-weight: bold;
+    color: #6555f5;
+}
+
+.tea .percentage {
+    color: #db2777;
+}
+
+.caption {
+    color: #96899f;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* Number of votes */
+.vote-count {
+    margin-top: 14px;
+    color: #6555f5;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Winner label */
+.winner {
+    display: none;
+    margin: 10px auto 0;
+    padding: 8px 12px;
+    width: fit-content;
+    border-radius: 20px;
+    background: #e9fbea;
+    color: #218739;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Total votes */
+.total-votes {
+    margin: 25px 0 18px;
+    padding: 20px;
+    background: linear-gradient(90deg, #f0eaff, #eaf2ff);
+    border-radius: 15px;
+}
+
+.total-votes p {
+    color: #716783;
+    font-size: 14px;
+}
+
+.total-votes strong {
+    display: block;
+    color: #6555f5;
+    font-size: 30px;
+    margin-top: 8px;
+}
+
+/* Message */
+.vote-message {
+    background: #f0fdf4;
+    color: #218739;
+    border-radius: 12px;
+    padding: 13px;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 13px 23px;
+    background: linear-gradient(90deg, #6555f5, #8a55ed);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+.btn-secondary {
+    background: #f0efff;
+    color: #6555f5;
+}
+
+/* No votes yet */
+.no-votes {
+    display: none;
+    padding: 20px;
+    background: #faf8ff;
+    border-radius: 12px;
+    color: #716783;
+    margin: 20px 0;
+    line-height: 1.7;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #737895;
+    font-size: 13px;
+}
+
+/* Mobile view */
+@media (max-width: 520px) {
+    header {
+        justify-content: center;
+        padding: 18px;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 13px;
+    }
+
+    .card {
+        padding: 25px 12px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .question {
+        font-size: 21px;
+    }
+
+    .result-options {
+        gap: 10px;
+    }
+
+    .option {
+        padding: 12px 7px;
+    }
+
+    .option img {
+        height: 115px;
+    }
+
+    .option h3 {
+        font-size: 15px;
+    }
+
+    .circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .circle-inner {
+        width: 76px;
+        height: 76px;
+    }
+
+    .percentage {
+        font-size: 21px;
+    }
+
+    .total-votes strong {
+        font-size: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">💜 This or That</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="vote.html">Vote</a>
+    </nav>
+</header>
+
+<main class="container">
+    <section class="card">
+
+        <h1>📊 Voting Results</h1>
+
+        <h2 class="question" id="resultQuestion">
+            Coffee vs Tea
+        </h2>
+
+        <p class="subtitle">
+            Your vote counts! Discover which choice is leading.
+        </p>
+
+        <div class="vote-message" id="voteMessage">
+            ✅ Here are the current results!
+        </div>
+
+        <div class="no-votes" id="noVotes">
+            🗳️ No votes have been recorded for this choice yet.
+            <br>
+            Be the first to vote!
+            <br><br>
+            <a href="vote.html" class="btn">Vote Now</a>
+        </div>
+
+        <div class="result-options" id="resultOptions">
+
+            <!-- LEFT CHOICE -->
+            <div class="option">
+
+                <img
+                    id="imageA"
+                    src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80"
+                    alt="Coffee">
+
+                <h3 id="nameA">☕ Coffee</h3>
+
+                <div class="circle" id="circleA"
+                     style="--percent: 65%">
+                    <div class="circle-inner">
+                        <span class="percentage" id="percentA">
+                            65%
+                        </span>
+                    </div>
+                </div>
+
+                <p class="caption">of total votes</p>
+
+                <p class="vote-count" id="votesA">
+                    78 votes
+                </p>
+
+                <div class="winner" id="winnerA">
+                    🏆 Winner
+                </div>
+
+            </div>
+
+            <!-- RIGHT CHOICE -->
+            <div class="option">
+
+                <img
+                    id="imageB"
+                    src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"
+                    alt="Tea">
+
+                <h3 id="nameB">🍵 Tea</h3>
+
+                <div class="circle tea" id="circleB"
+                     style="--percent: 35%">
+                    <div class="circle-inner">
+                        <span class="percentage" id="percentB">
+                            35%
+                        </span>
+                    </div>
+                </div>
+
+                <p class="caption">of total votes</p>
+
+                <p class="vote-count" id="votesB">
+                    42 votes
+                </p>
+
+                <div class="winner" id="winnerB">
+                    🏆 Winner
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="total-votes">
+            <p>🗳️ Total Votes</p>
+            <strong id="totalVotes">120</strong>
+        </div>
+
+        <div class="buttons">
+            <a href="explore.html" class="btn">
+                Explore More ✨
+            </a>
+
+            <a href="vote.html" class="btn btn-secondary">
+                Vote Again 🗳️
+            </a>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    © 2026 This or That · Small Choices. Big Opinions. 💜
+</footer>
+
+<script src="database.js"></script>
+<script>
+const defaultPolls = {
+    "1": {
+        question: "Coffee vs Tea",
+        nameA: "☕ Coffee",
+        nameB: "🍵 Tea",
+        imageA: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80",
+        votesA: 78,
+        votesB: 42
+    },
+
+    "2": {
+        question: "Pizza vs Burger",
+        nameA: "🍕 Pizza",
+        nameB: "🍔 Burger",
+        imageA: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80",
+        votesA: 65,
+        votesB: 35
+    },
+
+    "3": {
+        question: "Cats vs Dogs",
+        nameA: "🐱 Cats",
+        nameB: "🐶 Dogs",
+        imageA: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=80",
+        votesA: 55,
+        votesB: 45
+    },
+
+    "4": {
+        question: "Forest vs Ocean",
+        nameA: "🌲 Forest",
+        nameB: "🌊 Ocean",
+        imageA: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=400&q=80",
+        votesA: 40,
+        votesB: 60
+    },
+
+    "5": {
+        question: "City Development vs Environment",
+        nameA: "🏙️ City Development",
+        nameB: "🌳 Environment",
+        imageA: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80",
+        votesA: 45,
+        votesB: 55
+    },
+
+    "6": {
+        question: "Morning Person vs Night Owl",
+        nameA: "🌅 Morning Person",
+        nameB: "🌙 Night Owl",
+        imageA: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80",
+        votesA: 52,
+        votesB: 48
+    },
+
+    "7": {
+        question: "Higher Salary vs Work-Life Balance",
+        nameA: "💰 Higher Salary",
+        nameB: "⚖️ Work-Life Balance",
+        imageA: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=400&q=80",
+        votesA: 48,
+        votesB: 52
+    },
+
+    "8": {
+        question: "Gold vs Silver",
+        nameA: "✨ Gold",
+        nameB: "💎 Silver",
+        imageA: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=400&q=80",
+        votesA: 60,
+        votesB: 40
+    },
+
+    "9": {
+        question: "Beach vs Mountains",
+        nameA: "🏖️ Beach",
+        nameB: "🏔️ Mountains",
+        imageA: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80",
+        votesA: 58,
+        votesB: 42
+    },
+
+    "10": {
+        question: "Online Shopping vs Store Shopping",
+        nameA: "📱 Online Shopping",
+        nameB: "🛍️ Store Shopping",
+        imageA: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=400&q=80",
+        votesA: 62,
+        votesB: 38
+    },
+
+    "11": {
+        question: "iPhone vs Android",
+        nameA: "📱 iPhone",
+        nameB: "🤖 Android",
+        imageA: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "12": {
+        question: "Sunrise vs Sunset",
+        nameA: "🌅 Sunrise",
+        nameB: "🌇 Sunset",
+        imageA: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "13": {
+        question: "Public Transport vs Private Car",
+        nameA: "🚌 Public Transport",
+        nameB: "🚗 Private Car",
+        imageA: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "14": {
+        question: "Your 20s vs Your 30s",
+        nameA: "🌟 Your 20s",
+        nameB: "✨ Your 30s",
+        imageA: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "15": {
+        question: "High Salary vs Dream Job",
+        nameA: "💰 High Salary",
+        nameB: "💜 Dream Job",
+        imageA: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "16": {
+        question: "Watches vs Jewellery",
+        nameA: "⌚ Watches",
+        nameB: "💎 Jewellery",
+        imageA: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "17": {
+        question: "Sneakers vs Heels",
+        nameA: "👟 Sneakers",
+        nameB: "👠 Heels",
+        imageA: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "18": {
+        question: "Train Journey vs Air Travel",
+        nameA: "🚆 Train Journey",
+        nameB: "✈️ Air Travel",
+        imageA: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "19": {
+        question: "Movies vs Books",
+        nameA: "🎬 Movies",
+        nameB: "📚 Books",
+        imageA: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "20": {
+        question: "Online Learning vs Classroom",
+        nameA: "💻 Online Learning",
+        nameB: "🏫 Classroom",
+        imageA: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "21": {
+        question: "Football vs Cricket",
+        nameA: "⚽ Football",
+        nameB: "🏏 Cricket",
+        imageA: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "22": {
+        question: "Apartment vs Independent House",
+        nameA: "🏢 Apartment",
+        nameB: "🏡 Independent House",
+        imageA: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "23": {
+        question: "Laptop vs Tablet",
+        nameA: "💻 Laptop",
+        nameB: "📱 Tablet",
+        imageA: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "24": {
+        question: "City Life vs Countryside",
+        nameA: "🌆 City Life",
+        nameB: "🌳 Countryside",
+        imageA: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "25": {
+        question: "Backpack vs Handbag",
+        nameA: "🎒 Backpack",
+        nameB: "👜 Handbag",
+        imageA: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=400&q=80"
+    },
+
+    "26": {
+        question: "Remote Work vs Office Work",
+        nameA: "🏡 Remote Work",
+        nameB: "🏢 Office Work",
+        imageA: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=400&q=80",
+        imageB: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=400&q=80"
+    }
+};
+
+async function displayResults() {
+    const params = new URLSearchParams(window.location.search);
+    const pollId = params.get("id") || "1";
+
+    const poll = defaultPolls[pollId];
+    if (!poll) {
+        throw new Error("Poll not found.");
+    }
+
+    const votes = await PollDatabase.getBuiltinVotes(pollId);
+    const votesA = votes.optionA;
+    const votesB = votes.optionB;
+    const total = votesA + votesB;
+
+    document.getElementById("resultQuestion").textContent =
+        poll.question;
+
+    document.getElementById("nameA").textContent = poll.nameA;
+    document.getElementById("nameB").textContent = poll.nameB;
+
+    document.getElementById("imageA").src = poll.imageA;
+    document.getElementById("imageB").src = poll.imageB;
+
+    document.getElementById("imageA").alt = poll.nameA;
+    document.getElementById("imageB").alt = poll.nameB;
+
+    const voteUrl = "vote.html?id=" + encodeURIComponent(pollId);
+    document.querySelector("#noVotes a").href = voteUrl;
+    document.querySelector(".buttons .btn-secondary").href = voteUrl;
+
+    document.getElementById("totalVotes").textContent =
+        total.toLocaleString();
+
+    document.getElementById("votesA").textContent =
+        votesA.toLocaleString() + " votes";
+
+    document.getElementById("votesB").textContent =
+        votesB.toLocaleString() + " votes";
+
+    const percentA = total > 0
+        ? Math.round((votesA / total) * 100)
+        : 0;
+
+    const percentB = total > 0
+        ? 100 - percentA
+        : 0;
+
+    document.getElementById("percentA").textContent =
+        percentA + "%";
+
+    document.getElementById("percentB").textContent =
+        percentB + "%";
+
+    document.getElementById("circleA").style.setProperty(
+        "--percent", percentA + "%"
+    );
+
+    document.getElementById("circleB").style.setProperty(
+        "--percent", percentB + "%"
+    );
+
+    document.getElementById("winnerA").style.display = "none";
+    document.getElementById("winnerB").style.display = "none";
+
+    if (total === 0) {
+        document.getElementById("resultOptions").style.display = "none";
+        document.getElementById("noVotes").style.display = "block";
+        document.getElementById("voteMessage").style.display = "none";
+        return;
+    }
+
+    document.getElementById("resultOptions").style.display = "grid";
+    document.getElementById("noVotes").style.display = "none";
+    document.getElementById("voteMessage").style.display = "block";
+
+    if (votesA > votesB) {
+        document.getElementById("winnerA").style.display = "block";
+    } else if (votesB > votesA) {
+        document.getElementById("winnerB").style.display = "block";
+    } else {
+        document.getElementById("voteMessage").textContent =
+            "🤝 It's a tie! Both choices have equal votes.";
+        return;
+    }
+
+    document.getElementById("voteMessage").textContent =
+        "✅ Results updated! Thanks for participating.";
+}
+
+displayResults().catch(error => {
+    document.getElementById("resultOptions").style.display = "none";
+    document.getElementById("noVotes").style.display = "none";
+    document.getElementById("voteMessage").textContent =
+        "Unable to load results: " + error.message;
+    document.getElementById("voteMessage").style.display = "block";
+});
+</script>
+
+</body>
+</html>

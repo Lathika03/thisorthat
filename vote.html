@@ -1,0 +1,888 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cast Your Vote | This or That</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --purple: #7c3aed;
+    --purple-dark: #5b21b6;
+    --purple-light: #ede9fe;
+    --text: #241b35;
+    --muted: #777087;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #faf8ff;
+    color: var(--text);
+    min-height: 100vh;
+}
+
+header {
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid #eee8fb;
+    padding: 17px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--purple);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    text-decoration: none;
+    color: #625b70;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+nav a:hover,
+nav a.active {
+    color: var(--purple);
+}
+
+.nav-login {
+    background: var(--purple);
+    color: white !important;
+    padding: 10px 17px;
+    border-radius: 12px;
+}
+
+.page-container {
+    width: min(1100px, 92%);
+    margin: 42px auto 60px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.eyebrow {
+    display: inline-block;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    border-radius: 30px;
+    padding: 7px 15px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.intro h1 {
+    font-size: clamp(30px, 5vw, 45px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+
+.intro h1 span {
+    color: var(--purple);
+}
+
+.intro p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.vote-card {
+    background: white;
+    border: 1px solid #eee8fb;
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 15px 50px rgba(83,45,145,.08);
+}
+
+.question-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.question-top h2 {
+    font-size: clamp(19px, 3vw, 25px);
+}
+
+.vote-count {
+    background: #f4f0ff;
+    color: var(--purple-dark);
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.choices {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 60px minmax(0,1fr);
+    align-items: center;
+    gap: 15px;
+}
+
+.choice {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    background: white;
+    border: 2px solid #eee8fb;
+    border-radius: 22px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    padding: 0;
+    color: var(--text);
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+
+.choice:hover {
+    transform: translateY(-4px);
+    border-color: #b69af8;
+    box-shadow: 0 12px 28px rgba(124,58,237,.12);
+}
+
+.choice:focus-visible {
+    outline: 3px solid #a78bfa;
+    outline-offset: 4px;
+}
+
+.choice.selected {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 4px #ede9fe;
+    background: #faf7ff;
+}
+
+.choice-image {
+    position: relative;
+    height: 270px;
+    overflow: hidden;
+    background: #eee8fb;
+}
+
+.choice-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .4s;
+}
+
+.choice:hover .choice-image img {
+    transform: scale(1.04);
+}
+
+.choice-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(255,255,255,.95);
+    color: var(--purple-dark);
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.choice-content {
+    padding: 20px;
+}
+
+.choice-content h3 {
+    font-size: clamp(16px, 2.3vw, 23px);
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
+}
+
+.choice-content p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    min-height: 42px;
+}
+
+.choose-label {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 9px 15px;
+    background: #f3efff;
+    color: var(--purple-dark);
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.choice.selected .choose-label {
+    background: var(--purple);
+    color: white;
+}
+
+.vs-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 57px;
+    height: 57px;
+    border-radius: 50%;
+    color: white;
+    background: linear-gradient(135deg,#a78bfa,#6d28d9);
+    box-shadow: 0 8px 22px rgba(124,58,237,.25);
+    font-size: 17px;
+    font-weight: 800;
+    border: 5px solid white;
+}
+
+.vote-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.vote-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-width: 230px;
+    padding: 15px 28px;
+    border: none;
+    border-radius: 14px;
+    color: white;
+    background: linear-gradient(135deg,#8b5cf6,#6d28d9);
+    box-shadow: 0 8px 20px rgba(124,58,237,.22);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.vote-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.vote-button:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+}
+
+.message {
+    min-height: 26px;
+    margin-top: 14px;
+    color: var(--purple-dark);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.results-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.results-link:hover {
+    text-decoration: underline;
+}
+
+.tip {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 24px 15px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media (max-width: 720px) {
+    header {
+        padding: 16px 5%;
+        justify-content: center;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .page-container {
+        margin-top: 30px;
+    }
+
+    .vote-card {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .choices {
+        grid-template-columns: minmax(0,1fr) 38px minmax(0,1fr);
+        gap: 6px;
+    }
+
+    .choice {
+        border-radius: 16px;
+    }
+
+    .choice-image {
+        height: 175px;
+    }
+
+    .choice-tag {
+        top: 8px;
+        left: 7px;
+        padding: 5px 7px;
+        font-size: 9px;
+    }
+
+    .choice-content {
+        padding: 12px 10px;
+    }
+
+    .choice-content p {
+        font-size: 11px;
+    }
+
+    .choose-label {
+        padding: 8px;
+        font-size: 10px;
+    }
+
+    .vs {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        border-width: 3px;
+    }
+
+    .question-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 400px) {
+    nav {
+        gap: 10px;
+    }
+
+    nav a {
+        font-size: 12px;
+    }
+
+    .choice-image {
+        height: 135px;
+    }
+
+    .choice-content h3 {
+        font-size: 14px;
+    }
+
+    .choice-content p {
+        display: none;
+    }
+
+    .vote-card {
+        padding: 13px 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a class="logo" href="index.html">💜 This or That</a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="results.html">Results</a>
+    </nav>
+</header>
+
+<main class="page-container">
+
+    <section class="intro">
+        <span class="eyebrow">✨ YOUR OPINION MATTERS</span>
+        <h1>It's time to <span>choose!</span></h1>
+        <p>Two options. One choice. What do you prefer?</p>
+    </section>
+
+    <section class="vote-card">
+
+        <div class="question-top">
+            <h2 id="question">Which do you prefer?</h2>
+            <span class="vote-count">💜 Make your choice</span>
+        </div>
+
+        <div class="choices">
+
+            <button class="choice" id="optionA" type="button"
+                    aria-pressed="false">
+                <div class="choice-image">
+                    <img id="imageA" src="" alt="First choice">
+                    <span class="choice-tag">OPTION A</span>
+                </div>
+                <div class="choice-content">
+                    <h3 id="titleA">Option A</h3>
+                    <p id="descriptionA"></p>
+                    <span class="choose-label" id="labelA">Choose A</span>
+                </div>
+            </button>
+
+            <div class="vs-wrap">
+                <span class="vs">VS</span>
+            </div>
+
+            <button class="choice" id="optionB" type="button"
+                    aria-pressed="false">
+                <div class="choice-image">
+                    <img id="imageB" src="" alt="Second choice">
+                    <span class="choice-tag">OPTION B</span>
+                </div>
+                <div class="choice-content">
+                    <h3 id="titleB">Option B</h3>
+                    <p id="descriptionB"></p>
+                    <span class="choose-label" id="labelB">Choose B</span>
+                </div>
+            </button>
+
+        </div>
+
+        <div class="vote-actions">
+            <button class="vote-button" id="voteButton"
+                    type="button" disabled>
+                Cast Your Vote →
+            </button>
+
+            <p class="message" id="message" aria-live="polite">
+                Select the option you like best!
+            </p>
+
+            <a href="results.html" id="resultsLink" class="results-link">
+                View Results →
+            </a>
+        </div>
+
+    </section>
+
+    <p class="tip">
+        💡 There is no right or wrong answer. Choose your favourite!
+    </p>
+
+</main>
+
+<footer>
+    © 2026 This or That · Made for curious minds 💜
+</footer>
+
+<script src="database.js"></script>
+<script>
+const polls = {
+    "1": {
+        question: "Coffee vs Tea",
+        a: "☕ Coffee",
+        b: "🍵 Tea",
+        descA: "A rich cup to start your day.",
+        descB: "A relaxing drink for a peaceful moment.",
+        imgA: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=900&q=85"
+    },
+    "2": {
+        question: "Pizza vs Burger",
+        a: "🍕 Pizza",
+        b: "🍔 Burger",
+        descA: "A cheesy favourite.",
+        descB: "A classic, satisfying burger.",
+        imgA: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85"
+    },
+    "3": {
+        question: "Cats vs Dogs",
+        a: "🐱 Cats",
+        b: "🐶 Dogs",
+        descA: "Independent and adorable.",
+        descB: "Loyal and playful companions.",
+        imgA: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=85"
+    },
+    "4": {
+        question: "Forest vs Ocean",
+        a: "🌲 Forest",
+        b: "🌊 Ocean",
+        descA: "Peaceful green surroundings.",
+        descB: "Beautiful blue waters.",
+        imgA: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=900&q=85"
+    },
+    "5": {
+        question: "City Development vs Environment",
+        a: "🏙️ City Development",
+        b: "🌳 Environment",
+        descA: "Modern cities and infrastructure.",
+        descB: "Protect nature and green spaces.",
+        imgA: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85"
+    },
+    "6": {
+        question: "Morning Person vs Night Owl",
+        a: "🌅 Morning Person",
+        b: "🌙 Night Owl",
+        descA: "Fresh starts and early mornings.",
+        descB: "Late nights and quiet moments.",
+        imgA: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85"
+    },
+    "7": {
+        question: "Higher Salary vs Work-Life Balance",
+        a: "💰 Higher Salary",
+        b: "⚖️ Work-Life Balance",
+        descA: "Focus on your financial goals.",
+        descB: "Make time for work and life.",
+        imgA: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85"
+    },
+    "8": {
+        question: "Gold vs Silver",
+        a: "✨ Gold",
+        b: "💎 Silver",
+        descA: "A classic golden style.",
+        descB: "A sleek silver look.",
+        imgA: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=85"
+    },
+    "9": {
+        question: "Beach vs Mountains",
+        a: "🏖️ Beach",
+        b: "🏔️ Mountains",
+        descA: "Sunshine, sand and sea.",
+        descB: "Fresh air and mountain views.",
+        imgA: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85"
+    },
+    "10": {
+        question: "Online Shopping vs Store Shopping",
+        a: "📱 Online Shopping",
+        b: "🛍️ Store Shopping",
+        descA: "Shop from anywhere.",
+        descB: "Browse and buy in person.",
+        imgA: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=85"
+    },
+    "11": {
+        question: "iPhone vs Android",
+        a: "📱 iPhone",
+        b: "🤖 Android",
+        descA: "A sleek and simple experience.",
+        descB: "More ways to customise your phone.",
+        imgA: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=85"
+    },
+    "12": {
+        question: "Sunrise vs Sunset",
+        a: "🌅 Sunrise",
+        b: "🌇 Sunset",
+        descA: "A fresh start to a new day.",
+        descB: "A colourful end to the day.",
+        imgA: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85"
+    },
+    "13": {
+        question: "Public Transport vs Private Car",
+        a: "🚌 Public Transport",
+        b: "🚗 Private Car",
+        descA: "An affordable way to get around.",
+        descB: "Your own space and flexibility.",
+        imgA: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=85"
+    },
+    "14": {
+        question: "Your 20s vs Your 30s",
+        a: "🌟 Your 20s",
+        b: "✨ Your 30s",
+        descA: "Explore, experiment and discover.",
+        descB: "Grow, build and find your rhythm.",
+        imgA: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=85"
+    },
+    "15": {
+        question: "High Salary vs Dream Job",
+        a: "💰 High Salary",
+        b: "💜 Dream Job",
+        descA: "Reach your financial goals.",
+        descB: "Do work that you genuinely love.",
+        imgA: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85"
+    },
+    "16": {
+        question: "Watches vs Jewellery",
+        a: "⌚ Watches",
+        b: "💎 Jewellery",
+        descA: "Classic, practical and timeless.",
+        descB: "Express yourself with a little sparkle.",
+        imgA: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=85"
+    },
+    "17": {
+        question: "Sneakers vs Heels",
+        a: "👟 Sneakers",
+        b: "👠 Heels",
+        descA: "Comfortable and ready for anything.",
+        descB: "Dress up and make a statement.",
+        imgA: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=900&q=85"
+    },
+    "18": {
+        question: "Train Journey vs Air Travel",
+        a: "🚆 Train Journey",
+        b: "✈️ Air Travel",
+        descA: "Enjoy the scenery along the way.",
+        descB: "Reach your destination faster.",
+        imgA: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=85"
+    },
+    "19": {
+        question: "Movies vs Books",
+        a: "🎬 Movies",
+        b: "📚 Books",
+        descA: "Visual stories full of emotion.",
+        descB: "Let your imagination take over.",
+        imgA: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=900&q=85"
+    },
+    "20": {
+        question: "Online Learning vs Classroom",
+        a: "💻 Online Learning",
+        b: "🏫 Classroom",
+        descA: "Learn at your own pace from anywhere.",
+        descB: "Learn face-to-face with others.",
+        imgA: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=85"
+    },
+    "21": {
+        question: "Football vs Cricket",
+        a: "⚽ Football",
+        b: "🏏 Cricket",
+        descA: "Fast-paced action and team spirit.",
+        descB: "Strategy, skill and big moments.",
+        imgA: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=900&q=85"
+    },
+    "22": {
+        question: "Apartment vs Independent House",
+        a: "🏢 Apartment",
+        b: "🏡 Independent House",
+        descA: "Convenience and easy maintenance.",
+        descB: "More space and your own outdoor area.",
+        imgA: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85"
+    },
+    "23": {
+        question: "Laptop vs Tablet",
+        a: "💻 Laptop",
+        b: "📱 Tablet",
+        descA: "Great for multitasking and productivity.",
+        descB: "Lightweight for browsing and entertainment.",
+        imgA: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=900&q=85"
+    },
+    "24": {
+        question: "City Life vs Countryside",
+        a: "🌆 City Life",
+        b: "🌳 Countryside",
+        descA: "Events, opportunities and busy streets.",
+        descB: "Peaceful surroundings and open spaces.",
+        imgA: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=85"
+    },
+    "25": {
+        question: "Backpack vs Handbag",
+        a: "🎒 Backpack",
+        b: "👜 Handbag",
+        descA: "Practical for everyday adventures.",
+        descB: "A stylish finishing touch.",
+        imgA: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=85"
+    },
+    "26": {
+        question: "Remote Work vs Office Work",
+        a: "🏡 Remote Work",
+        b: "🏢 Office Work",
+        descA: "Flexibility and working from home.",
+        descB: "Teamwork and a dedicated workspace.",
+        imgA: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85",
+        imgB: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85"
+    }
+};
+
+const params = new URLSearchParams(window.location.search);
+const requestedId = params.get("id") || "1";
+const pollId = polls[requestedId] ? requestedId : "1";
+const poll = polls[pollId];
+
+let selectedOption = null;
+
+const optionA = document.getElementById("optionA");
+const optionB = document.getElementById("optionB");
+const voteButton = document.getElementById("voteButton");
+const message = document.getElementById("message");
+
+async function loadPoll() {
+    document.title = poll.question + " | This or That";
+
+    document.getElementById("question").textContent = poll.question;
+    document.getElementById("titleA").textContent = poll.a;
+    document.getElementById("titleB").textContent = poll.b;
+    document.getElementById("descriptionA").textContent = poll.descA;
+    document.getElementById("descriptionB").textContent = poll.descB;
+
+    const imageA = document.getElementById("imageA");
+    const imageB = document.getElementById("imageB");
+
+    imageA.onerror = () => {
+        imageA.onerror = null;
+        imageA.src = "https://placehold.co/900x600/ede9fe/5b21b6?text=Image+Unavailable";
+    };
+
+    imageB.onerror = () => {
+        imageB.onerror = null;
+        imageB.src = "https://placehold.co/900x600/ede9fe/5b21b6?text=Image+Unavailable";
+    };
+
+    imageA.src = poll.imgA;
+    imageB.src = poll.imgB;
+    imageA.alt = poll.a;
+    imageB.alt = poll.b;
+
+    document.getElementById("labelA").textContent = "Choose " + poll.a;
+    document.getElementById("labelB").textContent = "Choose " + poll.b;
+
+    document.getElementById("resultsLink").href =
+        "results.html?id=" + encodeURIComponent(pollId);
+
+    try {
+        const voteStatus = await PollDatabase.getBuiltinVotes(pollId);
+        if (voteStatus.hasVoted) {
+            selectedOption = voteStatus.optionIndex === 0 ? "A" : "B";
+            updateSelection();
+            message.textContent =
+                "You have already voted in this browser. You can update your choice.";
+            voteButton.textContent = "Update My Vote →";
+            voteButton.disabled = false;
+        }
+    } catch (error) {
+        message.textContent = "Unable to load voting data: " + error.message;
+        voteButton.disabled = true;
+    }
+}
+
+function chooseOption(option) {
+    selectedOption = option;
+    updateSelection();
+
+    message.textContent = option === "A"
+        ? "You selected " + poll.a + ". Ready to vote?"
+        : "You selected " + poll.b + ". Ready to vote?";
+
+    voteButton.disabled = false;
+    voteButton.textContent = "Cast Your Vote →";
+}
+
+function updateSelection() {
+    optionA.classList.toggle("selected", selectedOption === "A");
+    optionB.classList.toggle("selected", selectedOption === "B");
+
+    optionA.setAttribute("aria-pressed", String(selectedOption === "A"));
+    optionB.setAttribute("aria-pressed", String(selectedOption === "B"));
+
+    document.getElementById("labelA").textContent =
+        selectedOption === "A" ? "✓ Selected" : "Choose " + poll.a;
+
+    document.getElementById("labelB").textContent =
+        selectedOption === "B" ? "✓ Selected" : "Choose " + poll.b;
+}
+
+optionA.addEventListener("click", () => chooseOption("A"));
+optionB.addEventListener("click", () => chooseOption("B"));
+
+voteButton.addEventListener("click", async () => {
+    if (!selectedOption) {
+        message.textContent = "Please select an option first.";
+        return;
+    }
+
+    try {
+        await PollDatabase.castBuiltinVote(
+            pollId,
+            selectedOption === "A" ? 0 : 1
+        );
+
+        message.textContent = "💜 Your choice has been saved to the database!";
+        voteButton.textContent = "Vote Saved ✓";
+        voteButton.disabled = true;
+
+        setTimeout(() => {
+            window.location.href =
+                "results.html?id=" + encodeURIComponent(pollId);
+        }, 700);
+
+    } catch (error) {
+        console.error("Unable to save your vote:", error);
+        message.textContent =
+            "Unable to save your vote: " + error.message;
+    }
+});
+
+loadPoll().catch(error => {
+    message.textContent = "Unable to load this poll: " + error.message;
+    voteButton.disabled = true;
+});
+</script>
+
+</body>
+</html>

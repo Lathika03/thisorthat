@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">💜 This or That</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="explore.html">Explore</a>
+        <a href="profile.html">Profile</a>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="card">
+        <h1>⚙️ Settings</h1>
+
+        <label>Display Name</label>
+        <input type="text" id="settingName"
+               placeholder="Enter your name">
+
+        <label>Theme</label>
+        <select id="theme">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+
+        <button onclick="saveSettings()">Save Settings</button>
+        <p id="settingsMessage"></p>
+    </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

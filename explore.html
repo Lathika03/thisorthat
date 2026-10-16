@@ -1,0 +1,1069 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explore Choices | This or That</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+.explore-banner {
+    padding: 35px;
+    border-radius: 22px;
+    background: linear-gradient(120deg, #eee8ff, #e6f4ff, #fff0fa);
+    margin-bottom: 25px;
+}
+.explore-banner h1 { color: #6555f5; margin-bottom: 12px; }
+.explore-banner p { max-width: 650px; }
+
+.explore-tools {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+    margin: 25px 0;
+}
+.explore-tools input, .explore-tools select { margin: 0; }
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-bottom: 25px;
+}
+.category-btn {
+    border: 1px solid #e0e4f5;
+    background: white;
+    color: #53617e;
+    border-radius: 25px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+.category-btn.active, .category-btn:hover {
+    background: #6555f5;
+    color: white;
+}
+
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+.explore-card {
+    background: white;
+    padding: 15px;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px #dfe3f5;
+    transition: .25s;
+    min-width: 0;
+}
+.explore-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #d5d9f2;
+}
+.card-category {
+    color: #6555f5;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+.explore-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 7px;
+}
+.explore-option {
+    background: #fafaff;
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 0;
+    text-align: center;
+}
+.explore-option img {
+    width: 100%;
+    height: 165px;
+    object-fit: cover;
+    display: block;
+}
+.explore-option h3 {
+    font-size: 14px;
+    padding: 12px 4px;
+    overflow-wrap: anywhere;
+    color: #27345d;
+}
+.explore-vs {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f0efff;
+    color: #6555f5;
+    font-size: 10px;
+    font-weight: bold;
+}
+.explore-description {
+    font-size: 13px;
+    margin: 14px 0;
+    color: #737895;
+}
+.explore-vote {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #6555f5, #8a55ed);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+.explore-vote:hover { opacity: .85; }
+
+.no-results {
+    display: none;
+    background: white;
+    text-align: center;
+    padding: 35px;
+    margin-top: 20px;
+    border-radius: 15px;
+}
+
+/* COMMUNITY POLLS */
+.community-section {
+    margin-top: 45px;
+    padding-top: 25px;
+    border-top: 2px solid #eeeaff;
+}
+
+.community-heading { margin-bottom: 22px; }
+
+.community-heading h2 {
+    color: #6555f5;
+    margin-bottom: 8px;
+    font-size: 26px;
+}
+
+.community-heading p {
+    color: #737895;
+    font-size: 14px;
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.community-card {
+    background: white;
+    padding: 18px;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px #dfe3f5;
+    min-width: 0;
+    transition: .25s;
+}
+
+.community-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px #d5d9f2;
+}
+
+.community-card h3 {
+    color: #27345d;
+    font-size: 19px;
+    overflow-wrap: anywhere;
+    margin-bottom: 10px;
+}
+
+.community-category {
+    display: inline-block;
+    background: #f0efff;
+    color: #6555f5;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.community-description {
+    color: #737895;
+    font-size: 13px;
+    margin: 10px 0 15px;
+    overflow-wrap: anywhere;
+}
+
+.community-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.community-option {
+    background: #fafaff;
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 0;
+    text-align: center;
+    padding-bottom: 12px;
+}
+
+.community-option img {
+    width: 100%;
+    height: 165px;
+    object-fit: cover;
+    display: block;
+    background: #f0efff;
+}
+
+.community-option h4 {
+    font-size: 14px;
+    color: #27345d;
+    padding: 12px 5px;
+    overflow-wrap: anywhere;
+    min-height: 45px;
+}
+
+.community-vote-btn {
+    display: block;
+    width: calc(100% - 16px);
+    margin: 0 auto;
+    border: none;
+    padding: 10px 5px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #6555f5, #8a55ed);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.community-vote-btn:hover { opacity: .85; }
+
+.community-vote-btn:disabled {
+    background: #d6d5e5;
+    color: #5c5c70;
+    cursor: not-allowed;
+}
+
+/* LIVE VOTING RESULTS */
+.community-results {
+    margin-top: 18px;
+    padding: 14px;
+    background: #f8f7ff;
+    border-radius: 12px;
+}
+
+.community-results h4 {
+    margin: 0 0 12px;
+    color: #6555f5;
+    font-size: 14px;
+}
+
+.result-row { margin-bottom: 13px; }
+.result-row:last-child { margin-bottom: 0; }
+
+.result-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: #454d6a;
+    margin-bottom: 6px;
+}
+
+.result-label span:first-child {
+    overflow-wrap: anywhere;
+}
+
+.result-label strong {
+    white-space: nowrap;
+    color: #6555f5;
+}
+
+.result-track {
+    width: 100%;
+    height: 9px;
+    background: #e5e2f5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.result-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #6555f5, #b06cf5);
+    border-radius: 20px;
+    transition: width .4s ease;
+}
+
+.community-votes {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #6555f5;
+    font-weight: bold;
+}
+
+.community-empty {
+    display: none;
+    background: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 15px;
+    color: #737895;
+    box-shadow: 0 5px 20px #dfe3f5;
+}
+
+.community-empty a {
+    color: #6555f5;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.community-empty a:hover { text-decoration: underline; }
+
+@media (max-width: 850px) {
+    .explore-grid { grid-template-columns: 1fr; }
+    .explore-option img { height: 210px; }
+    .community-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+    .explore-banner { padding: 23px; }
+    .explore-banner h1 { font-size: 29px; }
+    .explore-tools { grid-template-columns: 1fr; }
+
+    .explore-options {
+        grid-template-columns: minmax(0, 1fr) 27px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .explore-option img { height: 125px; }
+    .explore-option h3 { font-size: 12px; }
+    .explore-vs { width: 27px; height: 27px; }
+    .community-heading h2 { font-size: 23px; }
+    .community-option img { height: 125px; }
+    .community-option h4 { font-size: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">💜 This or That</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="explore.html" class="active">Explore</a>
+        <a href="create.html">Create</a>
+        <a href="results.html">Results</a>
+
+    </nav>
+    <style>
+.nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search {
+    width: 160px;
+    padding: 11px;
+    border: 1px solid #e1e5f4;
+    border-radius: 20px;
+    outline: none;
+}
+
+.search:focus {
+    border-color: #6255ff;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #6255ff;
+    border-radius: 50%;
+    padding: 3px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.profile-link:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px #d9d4ff;
+}
+
+.profile-picture {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 520px) {
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search {
+        width: 65%;
+    }
+
+    .profile-picture {
+        width: 38px;
+        height: 38px;
+    }
+}
+</style>
+
+<div class="nav-actions">
+    <input
+        class="search"
+        id="searchBox"
+        type="search"
+        placeholder="Search choices..."
+        aria-label="Search choices">
+
+    <a href="profile.html" class="profile-link" aria-label="Open profile">
+        <img
+            class="profile-picture"
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80"
+            alt="Profile picture">
+    </a>
+</div>
+</header>
+
+<main class="container">
+
+<section class="explore-banner">
+    <h1>Discover Something New 🌎</h1>
+    <p>
+        Explore fresh questions beyond the popular choices on Home.
+        Pick a side, share your opinion, and discover what others prefer!
+    </p>
+</section>
+
+<div class="explore-tools">
+    <input type="search" id="search"
+           placeholder="🔍 Search choices..."
+           aria-label="Search choices">
+
+    <select id="category" aria-label="Filter by category">
+        <option value="all">All Categories</option>
+        <option value="technology">Technology</option>
+        <option value="nature">Nature</option>
+        <option value="politics">Politics & Society</option>
+        <option value="lifestyle">Age & Lifestyle</option>
+        <option value="salary">Salary & Career</option>
+        <option value="accessories">Accessories</option>
+        <option value="fashion">Fashion</option>
+        <option value="travel">Travel</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="education">Education</option>
+        <option value="sports">Sports</option>
+        <option value="home">Home & Living</option>
+    </select>
+</div>
+
+<div class="category-list">
+    <button class="category-btn active" data-filter="all">🌎 All</button>
+    <button class="category-btn" data-filter="technology">📱 Technology</button>
+    <button class="category-btn" data-filter="nature">🌿 Nature</button>
+    <button class="category-btn" data-filter="politics">🏛️ Society</button>
+    <button class="category-btn" data-filter="lifestyle">🎂 Lifestyle</button>
+    <button class="category-btn" data-filter="salary">💰 Career</button>
+    <button class="category-btn" data-filter="accessories">💎 Accessories</button>
+    <button class="category-btn" data-filter="fashion">👗 Fashion</button>
+    <button class="category-btn" data-filter="travel">✈️ Travel</button>
+    <button class="category-btn" data-filter="entertainment">🎬 Entertainment</button>
+    <button class="category-btn" data-filter="education">📚 Education</button>
+    <button class="category-btn" data-filter="sports">⚽ Sports</button>
+    <button class="category-btn" data-filter="home">🏡 Home</button>
+</div>
+
+<div class="explore-grid" id="choices">
+
+<!-- 1 TECHNOLOGY -->
+<article class="explore-card" data-category="technology" data-search="iphone android mobile technology smartphone">
+<div class="card-category">📱 TECHNOLOGY</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=500&q=80" alt="Smartphone">
+<h3>📱 iPhone</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=500&q=80" alt="Android phone">
+<h3>🤖 Android</h3>
+</div>
+</div>
+<p class="explore-description">Which phone would you choose?</p>
+<a href="vote.html?id=11" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 2 NATURE -->
+<article class="explore-card" data-category="nature" data-search="sunrise sunset nature sky">
+<div class="card-category">🌿 NATURE</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=500&q=80" alt="Sunrise">
+<h3>🌅 Sunrise</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?auto=format&fit=crop&w=500&q=80" alt="Sunset">
+<h3>🌇 Sunset</h3>
+</div>
+</div>
+<p class="explore-description">Early morning magic or evening colours?</p>
+<a href="vote.html?id=12" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 3 SOCIETY -->
+<article class="explore-card" data-category="politics" data-search="politics public transport private car society">
+<div class="card-category">🏛️ SOCIETY</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=500&q=80" alt="Public bus">
+<h3>🚌 Public Transport</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=500&q=80" alt="Private car">
+<h3>🚗 Private Car</h3>
+</div>
+</div>
+<p class="explore-description">Which transport option should cities prioritise?</p>
+<a href="vote.html?id=13" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 4 LIFESTYLE -->
+<article class="explore-card" data-category="lifestyle" data-search="age lifestyle twenties thirties young adults">
+<div class="card-category">🎂 AGE & LIFESTYLE</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80" alt="Young adult">
+<h3>✨ Your 20s</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80" alt="Adult portrait">
+<h3>🌟 Your 30s</h3>
+</div>
+</div>
+<p class="explore-description">Which life stage sounds more exciting to you?</p>
+<a href="vote.html?id=14" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 5 SALARY -->
+<article class="explore-card" data-category="salary" data-search="salary career high pay passion work">
+<div class="card-category">💰 SALARY & CAREER</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=500&q=80" alt="Financial planning">
+<h3>💰 High Salary</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=500&q=80" alt="Team collaborating">
+<h3>❤️ Dream Job</h3>
+</div>
+</div>
+<p class="explore-description">High pay or work you genuinely love?</p>
+<a href="vote.html?id=15" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 6 ACCESSORIES -->
+<article class="explore-card" data-category="accessories" data-search="accessories watch bracelet jewellery">
+<div class="card-category">💎 ACCESSORIES</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=500&q=80" alt="Watch">
+<h3>⌚ Watches</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=500&q=80" alt="Jewellery">
+<h3>💎 Jewellery</h3>
+</div>
+</div>
+<p class="explore-description">Which accessory completes your look?</p>
+<a href="vote.html?id=16" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 7 FASHION -->
+<article class="explore-card" data-category="fashion" data-search="fashion sneakers heels shoes style">
+<div class="card-category">👗 FASHION</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="Sneakers">
+<h3>👟 Sneakers</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=500&q=80" alt="Heels">
+<h3>👠 Heels</h3>
+</div>
+</div>
+<p class="explore-description">Comfortable sneakers or stylish heels?</p>
+<a href="vote.html?id=17" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 8 TRAVEL -->
+<article class="explore-card" data-category="travel" data-search="travel train airplane flight journey">
+<div class="card-category">✈️ TRAVEL</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=500&q=80" alt="Train">
+<h3>🚆 Train Journey</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=500&q=80" alt="Airplane">
+<h3>✈️ Air Travel</h3>
+</div>
+</div>
+<p class="explore-description">Scenic train rides or faster flights?</p>
+<a href="vote.html?id=18" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 9 ENTERTAINMENT -->
+<article class="explore-card" data-category="entertainment" data-search="movies cinema books reading entertainment">
+<div class="card-category">🎬 ENTERTAINMENT</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80" alt="Cinema">
+<h3>🎬 Movies</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=500&q=80" alt="Books">
+<h3>📚 Books</h3>
+</div>
+</div>
+<p class="explore-description">Watch a story or read one?</p>
+<a href="vote.html?id=19" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 10 EDUCATION -->
+<article class="explore-card" data-category="education" data-search="education online classes classroom learning">
+<div class="card-category">📚 EDUCATION</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=500&q=80" alt="Online learning">
+<h3>💻 Online Learning</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=500&q=80" alt="Classroom learning">
+<h3>🏫 Classroom</h3>
+</div>
+</div>
+<p class="explore-description">Learn from home or in a classroom?</p>
+<a href="vote.html?id=20" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 11 SPORTS -->
+<article class="explore-card" data-category="sports" data-search="sports football cricket game">
+<div class="card-category">⚽ SPORTS</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=500&q=80" alt="Football">
+<h3>⚽ Football</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=500&q=80" alt="Cricket">
+<h3>🏏 Cricket</h3>
+</div>
+</div>
+<p class="explore-description">Which sport would you rather watch?</p>
+<a href="vote.html?id=21" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 12 HOME -->
+<article class="explore-card" data-category="home" data-search="home apartment house living">
+<div class="card-category">🏡 HOME & LIVING</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=500&q=80" alt="Modern apartment">
+<h3>🏢 Apartment</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=500&q=80" alt="House">
+<h3>🏡 Independent House</h3>
+</div>
+</div>
+<p class="explore-description">Apartment convenience or a house of your own?</p>
+<a href="vote.html?id=22" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 13 TECHNOLOGY -->
+<article class="explore-card" data-category="technology" data-search="technology laptop tablet computer">
+<div class="card-category">📱 TECHNOLOGY</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=500&q=80" alt="Laptop">
+<h3>💻 Laptop</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=500&q=80" alt="Tablet">
+<h3>📲 Tablet</h3>
+</div>
+</div>
+<p class="explore-description">Which device suits your everyday life?</p>
+<a href="vote.html?id=23" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 14 LIFESTYLE -->
+<article class="explore-card" data-category="lifestyle" data-search="lifestyle city countryside village">
+<div class="card-category">🎂 LIFESTYLE</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=500&q=80" alt="City skyline">
+<h3>🌆 City Life</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=500&q=80" alt="Countryside">
+<h3>🌳 Countryside</h3>
+</div>
+</div>
+<p class="explore-description">Busy city living or peaceful surroundings?</p>
+<a href="vote.html?id=24" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 15 ACCESSORIES -->
+<article class="explore-card" data-category="accessories" data-search="accessories backpack handbag bag">
+<div class="card-category">💎 ACCESSORIES</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=80" alt="Backpack">
+<h3>🎒 Backpack</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=500&q=80" alt="Handbag">
+<h3>👜 Handbag</h3>
+</div>
+</div>
+<p class="explore-description">Practical backpack or fashionable handbag?</p>
+<a href="vote.html?id=25" class="explore-vote">Vote Now →</a>
+</article>
+
+<!-- 16 CAREER -->
+<article class="explore-card" data-category="salary" data-search="career remote office work job">
+<div class="card-category">💰 CAREER</div>
+<div class="explore-options">
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?auto=format&fit=crop&w=500&q=80" alt="Remote work">
+<h3>🏠 Remote Work</h3>
+</div>
+<span class="explore-vs">VS</span>
+<div class="explore-option">
+<img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=500&q=80" alt="Office work">
+<h3>🏢 Office Work</h3>
+</div>
+</div>
+<p class="explore-description">Work from anywhere or at an office?</p>
+<a href="vote.html?id=26" class="explore-vote">Vote Now →</a>
+</article>
+
+</div>
+
+<div class="no-results" id="noResults">
+    <h2>No choices found 😕</h2>
+    <p>Try a different search or category.</p>
+</div>
+
+<!-- COMMUNITY POLLS -->
+<section class="community-section">
+    <div class="community-heading">
+        <h2>💜 Community Polls</h2>
+        <p>Discover user-created polls, cast your vote, and see the results.</p>
+    </div>
+
+    <div class="community-grid" id="communityPolls"></div>
+
+    <div class="community-empty" id="noCommunityPolls">
+        <h3>No community polls yet 💭</h3>
+        <p>
+            Be the first to
+            <a href="create.html">create a poll!</a>
+        </p>
+    </div>
+</section>
+
+</main>
+
+<footer>© 2026 This or That · Small Choices. Big Opinions. 💜</footer>
+
+<script src="database.js"></script>
+<script>
+/* BUILT-IN POLL FILTERING */
+const searchInput = document.getElementById("search");
+const categorySelect = document.getElementById("category");
+const cards = document.querySelectorAll(".explore-card");
+const categoryButtons = document.querySelectorAll(".category-btn");
+const noResults = document.getElementById("noResults");
+
+let activeCategory = "all";
+
+function filterChoices() {
+    const query = searchInput.value.toLowerCase().trim();
+    const dropdownCategory = categorySelect.value;
+
+    const selectedCategory =
+        dropdownCategory !== "all" ? dropdownCategory : activeCategory;
+
+    let visible = 0;
+
+    cards.forEach(card => {
+        const searchableText =
+            (card.dataset.search + " " + card.textContent).toLowerCase();
+
+        const matchesSearch = searchableText.includes(query);
+
+        const matchesCategory =
+            selectedCategory === "all" ||
+            card.dataset.category === selectedCategory;
+
+        const show = matchesSearch && matchesCategory;
+
+        card.style.display = show ? "" : "none";
+
+        if (show) visible++;
+    });
+
+    noResults.style.display = visible ? "none" : "block";
+
+    categoryButtons.forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.filter === selectedCategory
+        );
+    });
+}
+
+searchInput.addEventListener("input", filterChoices);
+
+categorySelect.addEventListener("change", () => {
+    activeCategory = "all";
+    filterChoices();
+});
+
+categoryButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        activeCategory = button.dataset.filter;
+        categorySelect.value = activeCategory;
+        filterChoices();
+    });
+});
+
+
+/* COMMUNITY POLLS: VOTING AND RESULTS */
+(function () {
+    const container = document.getElementById("communityPolls");
+    const emptyMessage = document.getElementById("noCommunityPolls");
+
+    function getVotes(poll) {
+        return poll.options.map(option => Math.max(0, Number(option.votes) || 0));
+    }
+
+    function createResultBars(options, votes, totalVotes) {
+        const results = document.createElement("div");
+        results.className = "community-results";
+
+        const heading = document.createElement("h4");
+        heading.textContent = "📊 Voting Results";
+        results.appendChild(heading);
+
+        options.forEach((option, index) => {
+            const count = votes[index] || 0;
+
+            const percentage = totalVotes > 0
+                ? (count / totalVotes) * 100
+                : 0;
+
+            const row = document.createElement("div");
+            row.className = "result-row";
+
+            const label = document.createElement("div");
+            label.className = "result-label";
+
+            const optionName = document.createElement("span");
+            optionName.textContent =
+                option.name || ("Option " + (index + 1));
+
+            const percentText = document.createElement("strong");
+            percentText.textContent = percentage.toFixed(1) + "%";
+
+            label.appendChild(optionName);
+            label.appendChild(percentText);
+
+            const track = document.createElement("div");
+            track.className = "result-track";
+
+            const fill = document.createElement("div");
+            fill.className = "result-fill";
+            fill.style.width = percentage + "%";
+
+            track.appendChild(fill);
+            row.appendChild(label);
+            row.appendChild(track);
+            results.appendChild(row);
+        });
+
+        return results;
+    }
+
+    async function renderCommunityPolls() {
+        const polls = await PollDatabase.getPolls();
+
+        container.replaceChildren();
+
+        emptyMessage.style.display = polls.length ? "none" : "block";
+
+        // Show the newest created polls first.
+        polls.slice().reverse().forEach(poll => {
+            if (!poll || !poll.id) return;
+
+            const options = Array.isArray(poll.options)
+                ? poll.options
+                : [];
+
+            if (options.length < 2) return;
+
+            const card = document.createElement("article");
+            card.className = "community-card";
+
+            const title = document.createElement("h3");
+            title.textContent = poll.question || "Community Poll";
+            card.appendChild(title);
+
+            const category = document.createElement("span");
+            category.className = "community-category";
+            category.textContent = poll.category || "Other";
+            card.appendChild(category);
+
+            if (poll.description) {
+                const description = document.createElement("p");
+                description.className = "community-description";
+                description.textContent = poll.description;
+                card.appendChild(description);
+            }
+
+            const votes = getVotes(poll);
+            const totalVotes = votes.reduce((sum, value) => sum + value, 0);
+            const votedAlready = poll.hasVoted;
+
+            const optionsBox = document.createElement("div");
+            optionsBox.className = "community-options";
+
+            options.forEach((option, index) => {
+                const optionBox = document.createElement("div");
+                optionBox.className = "community-option";
+
+                const img = document.createElement("img");
+                img.alt = option.name || ("Option " + (index + 1));
+                img.loading = "lazy";
+
+                img.src = option.image ||
+                    "https://placehold.co/400x250/eee8ff/6555f5?text=No+Image";
+
+                img.onerror = function () {
+                    this.onerror = null;
+                    this.src =
+                        "https://placehold.co/400x250/eee8ff/6555f5?text=No+Image";
+                };
+
+                optionBox.appendChild(img);
+
+                const name = document.createElement("h4");
+                name.textContent =
+                    option.name || ("Option " + (index + 1));
+                optionBox.appendChild(name);
+
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "community-vote-btn";
+
+                if (votedAlready) {
+                    button.textContent = "✓ Vote recorded";
+                    button.disabled = true;
+                } else {
+                    button.textContent = "Vote for this";
+                }
+
+                button.addEventListener("click", function () {
+                    castVote(poll.id, index);
+                });
+
+                optionBox.appendChild(button);
+                optionsBox.appendChild(optionBox);
+            });
+
+            card.appendChild(optionsBox);
+
+            const voteInfo = document.createElement("p");
+            voteInfo.className = "community-votes";
+            voteInfo.textContent =
+                "🗳️ " + totalVotes + (totalVotes === 1 ? " vote" : " votes");
+
+            card.appendChild(voteInfo);
+
+            // Show the percentages after this browser has voted.
+            // Returning voters can see the same results again.
+            if (votedAlready) {
+                card.appendChild(
+                    createResultBars(options, votes, totalVotes)
+                );
+            }
+
+            container.appendChild(card);
+        });
+
+        // If the saved data contains no valid polls, show the empty message.
+        if (container.children.length > 0) {
+            emptyMessage.style.display = "none";
+        } else {
+            emptyMessage.style.display = "block";
+        }
+    }
+
+    async function castVote(pollId, optionIndex) {
+        try {
+            await PollDatabase.castVote(pollId, optionIndex);
+            await renderCommunityPolls();
+            alert("💜 Your vote has been saved to the database!");
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    function refreshCommunityPolls() {
+        renderCommunityPolls().catch(error => {
+            container.replaceChildren();
+            emptyMessage.textContent =
+                "Unable to load community polls: " + error.message;
+            emptyMessage.style.display = "block";
+        });
+    }
+
+    refreshCommunityPolls();
+    window.addEventListener("pageshow", refreshCommunityPolls);
+})();
+</script>
+
+</body>
+</html>
+```
